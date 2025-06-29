@@ -320,7 +320,6 @@ const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${rep
 
 // Replace your current handleDownloadReport function with this:
 const handleDownloadReport = (report) => {
-  // Create a direct URL to the public report page
   const publicUrl = `${window.location.origin}/public-report/${report._id}`;
   window.open(publicUrl, '_blank');
   console.log('📄 Opened public report:', publicUrl);
@@ -790,12 +789,12 @@ const handleDownloadReport = (report) => {
                       <Eye className="w-4 h-4 mr-1" />
                       View
                     </button>
-                   <button
-  onClick={() => handleShareableReport(report)}
-  className="flex-1 inline-flex items-center justify-center px-3 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-all duration-200 text-sm font-medium"
->
-  <Download className="w-4 h-4 mr-1" />
-  Share PDF
+           <button   
+  onClick={() => handleDownloadReport(report)}   
+  className="flex-1 inline-flex items-center justify-center px-3 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-all duration-200 text-sm font-medium" 
+>   
+  <Download className="w-4 h-4 mr-1" />   
+  Share PDF 
 </button>
                     <button
                       onClick={() => handleEditReport(report)}

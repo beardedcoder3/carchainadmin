@@ -34,7 +34,7 @@ function App() {
                       <Routes>
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/public-report/:reportId" element={<PublicReport />} />
+                     <Route path="/public-report/:reportId" element={<PublicReport />} />
                         <Route path="/reports" element={<Reports />} />
                         <Route path="/settings" element={<Settings />} />
                         <Route path="*" element={
