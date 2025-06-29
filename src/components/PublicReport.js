@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Download, Car, Calendar, User, MapPin, Star, Shield, FileText, Phone, Mail, CheckCircle } from 'lucide-react';
-import logo from './logo.png'; // Import the logo
+import logo from '../logo.png'; // Import the logo
 
 const PublicReport = () => {
   const { reportId } = useParams();
@@ -292,6 +292,151 @@ const PublicReport = () => {
               </div>
             </div>
           </div>
+
+          {/* Category Ratings */}
+          {report.inspectionResults && Object.keys(report.inspectionResults).length > 0 && (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="px-8 py-6 border-b border-gray-200">
+                <h3 className="text-xl font-semibold text-gray-900 flex items-center">
+                  <Star className="w-6 h-6 mr-3 text-red-600" />
+                  Category Performance Ratings
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">Individual component assessment scores</p>
+              </div>
+              
+              <div className="p-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {Object.entries(report.inspectionResults).map(([category, items]) => {
+                    // Calculate category rating based on items
+                    const itemValues = Object.values(items);
+                    const goodCount = itemValues.filter(value => 
+                      ['Good', 'Ok', 'Working', 'Excellent', 'Clean', 'Normal', 'Smooth', 'Pass'].some(v => 
+                        value?.toLowerCase().includes(v.toLowerCase())
+                      )
+                    ).length;
+                    const fairCount = itemValues.filter(value => 
+                      ['Fair', 'Worn', 'Low', 'Weak', 'Minor', 'Average'].some(v => 
+                        value?.toLowerCase().includes(v.toLowerCase())
+                      )
+                    ).length;
+                    const poorCount = itemValues.length - goodCount - fairCount;
+                    
+                    // Calculate rating (1-10 scale)
+                    const rating = Math.round(
+                      ((goodCount * 10) + (fairCount * 6) + (poorCount * 3)) / itemValues.length
+                    );
+                    
+                    const ratingColor = rating >= 8 ? 'bg-green-500' : rating >= 6 ? 'bg-yellow-500' : 'bg-red-500';
+                    const ratingBgColor = rating >= 8 ? 'bg-green-50' : rating >= 6 ? 'bg-yellow-50' : 'bg-red-50';
+                    const ratingTextColor = rating >= 8 ? 'text-green-800' : rating >= 6 ? 'text-yellow-800' : 'text-red-800';
+                    
+                    return (
+                      <div key={category} className={`p-6 rounded-lg border-2 ${rating >= 8 ? 'border-green-200' : rating >= 6 ? 'border-yellow-200' : 'border-red-200'} ${ratingBgColor}`}>
+                        <div className="flex items-center justify-between mb-4">
+                          <h4 className="text-lg font-semibold text-gray-900 capitalize">
+                            {category.replace(/([A-Z])/g, ' $1').trim()}
+                          </h4>
+                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-bold ${ratingTextColor}`}>
+                            {rating}/10
+                          </span>
+                        </div>
+                        
+                        {/* Rating Bar */}
+                        <div className="mb-4">
+                          <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                            <span>Performance Score</span>
+                            <span className="font-medium">{rating * 10}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                            <div 
+                              className={`h-full ${ratingColor} transition-all duration-1000 ease-out rounded-full`}
+                              style={{ width: `${rating * 10}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                        
+                        {/* Rating Summary */}
+                        <div className="grid grid-cols-3 gap-3 text-xs">
+                          <div className="text-center">
+                            <div className="w-full bg-green-200 rounded h-2 mb-1">
+                              <div 
+                                className="bg-green-500 h-full rounded" 
+                                style={{ width: `${(goodCount / itemValues.length) * 100}%` }}
+                              ></div>
+                            </div>
+                            <span className="text-green-700 font-medium">{goodCount} Good</span>
+                          </div>
+                          <div className="text-center">
+                            <div className="w-full bg-yellow-200 rounded h-2 mb-1">
+                              <div 
+                                className="bg-yellow-500 h-full rounded" 
+                                style={{ width: `${(fairCount / itemValues.length) * 100}%` }}
+                              ></div>
+                            </div>
+                            <span className="text-yellow-700 font-medium">{fairCount} Fair</span>
+                          </div>
+                          <div className="text-center">
+                            <div className="w-full bg-red-200 rounded h-2 mb-1">
+                              <div 
+                                className="bg-red-500 h-full rounded" 
+                                style={{ width: `${(poorCount / itemValues.length) * 100}%` }}
+                              ></div>
+                            </div>
+                            <span className="text-red-700 font-medium">{poorCount} Poor</span>
+                          </div>
+                        </div>
+                        
+                        {/* Items Count */}
+                        <div className="mt-4 pt-4 border-t border-gray-200">
+                          <p className="text-sm text-gray-600">
+                            <span className="font-medium">{itemValues.length}</span> components inspected
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                {/* Overall Performance Summary */}
+                <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <CheckCircle className="w-5 h-5 mr-2 text-red-600" />
+                    Performance Summary
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {(() => {
+                      const allItems = Object.values(report.inspectionResults).flatMap(items => Object.values(items));
+                      const totalGood = allItems.filter(value => 
+                        ['Good', 'Ok', 'Working', 'Excellent', 'Clean', 'Normal', 'Smooth', 'Pass'].some(v => 
+                          value?.toLowerCase().includes(v.toLowerCase())
+                        )
+                      ).length;
+                      const totalFair = allItems.filter(value => 
+                        ['Fair', 'Worn', 'Low', 'Weak', 'Minor', 'Average'].some(v => 
+                          value?.toLowerCase().includes(v.toLowerCase())
+                        )
+                      ).length;
+                      const totalPoor = allItems.length - totalGood - totalFair;
+                      
+                      return [
+                        { label: 'Good Condition', count: totalGood, color: 'text-green-600', bg: 'bg-green-100' },
+                        { label: 'Fair Condition', count: totalFair, color: 'text-yellow-600', bg: 'bg-yellow-100' },
+                        { label: 'Needs Attention', count: totalPoor, color: 'text-red-600', bg: 'bg-red-100' }
+                      ].map((stat, index) => (
+                        <div key={index} className={`${stat.bg} p-4 rounded-lg text-center`}>
+                          <div className={`text-2xl font-bold ${stat.color} mb-1`}>{stat.count}</div>
+                          <div className="text-sm font-medium text-gray-700">{stat.label}</div>
+                          <div className="text-xs text-gray-600 mt-1">
+                            {Math.round((stat.count / allItems.length) * 100)}% of total
+                          </div>
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Inspection Results */}
           {report.inspectionResults && Object.keys(report.inspectionResults).length > 0 && (
