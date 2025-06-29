@@ -1,0 +1,430 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark theme styles */
+.dark {
+  color-scheme: dark;
+}
+
+/* Background colors */
+.dark .bg-slate-50 { 
+  background-color: #0f172a !important; 
+}
+
+.dark .bg-white { 
+  background-color: #1e293b !important; 
+}
+
+.dark .bg-slate-100 { 
+  background-color: #334155 !important; 
+}
+
+.dark .bg-gray-100 { 
+  background-color: #0f172a !important; 
+}
+
+/* Text colors */
+.dark .text-slate-900 { 
+  color: #f8fafc !important; 
+}
+
+.dark .text-slate-800 { 
+  color: #e2e8f0 !important; 
+}
+
+.dark .text-slate-700 { 
+  color: #cbd5e1 !important; 
+}
+
+.dark .text-slate-600 { 
+  color: #94a3b8 !important; 
+}
+
+.dark .text-slate-500 { 
+  color: #64748b !important; 
+}
+
+.dark .text-slate-400 { 
+  color: #475569 !important; 
+}
+
+/* Border colors */
+.dark .border-slate-200 { 
+  border-color: #334155 !important; 
+}
+
+.dark .border-slate-300 { 
+  border-color: #475569 !important; 
+}
+
+/* Input and form elements */
+.dark input, 
+.dark select, 
+.dark textarea {
+  background-color: #334155 !important;
+  border-color: #475569 !important;
+  color: #f8fafc !important;
+}
+
+.dark input:focus, 
+.dark select:focus, 
+.dark textarea:focus {
+  background-color: #334155 !important;
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2) !important;
+}
+
+.dark input::placeholder {
+  color: #64748b !important;
+}
+
+/* Hover states */
+.dark .hover\\:bg-slate-50:hover { 
+  background-color: #334155 !important; 
+}
+
+.dark .hover\\:bg-slate-100:hover { 
+  background-color: #475569 !important; 
+}
+
+.dark .hover\\:bg-slate-200:hover { 
+  background-color: #475569 !important; 
+}
+
+/* Shadows */
+.dark .shadow-sm { 
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.4) !important; 
+}
+
+.dark .shadow-lg { 
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3) !important; 
+}
+
+.dark .shadow-xl { 
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3) !important; 
+}
+
+/* Sidebar specific dark styles */
+.dark .bg-slate-800 { 
+  background-color: #0f172a !important; 
+}
+
+.dark .bg-slate-900 { 
+  background-color: #020617 !important; 
+}
+
+/* Special color backgrounds */
+.dark .bg-red-50 { 
+  background-color: rgba(220, 38, 38, 0.1) !important; 
+}
+
+.dark .bg-green-50 { 
+  background-color: rgba(34, 197, 94, 0.1) !important; 
+}
+
+.dark .bg-blue-50 { 
+  background-color: rgba(59, 130, 246, 0.1) !important; 
+}
+
+.dark .bg-yellow-50 { 
+  background-color: rgba(245, 158, 11, 0.1) !important; 
+}
+
+.dark .bg-emerald-50 { 
+  background-color: rgba(16, 185, 129, 0.1) !important; 
+}
+
+/* Scrollbar styles for dark mode */
+.dark ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Transition for smooth theme switching */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* Make sure red colors stay consistent */
+.bg-red-600,
+.text-red-600,
+.border-red-500,
+.ring-red-500 {
+  /* These should remain the same in both themes */
+}
+
+/* ==========================================
+   NOTIFICATION SYSTEM - COMPLETE SETUP
+   ========================================== */
+
+/* Main notification container */
+.notification-container {
+  position: fixed !important;
+  top: 1rem !important;
+  right: 1rem !important;
+  z-index: 9999 !important;
+  pointer-events: none !important;
+}
+
+.notification-container > div {
+  pointer-events: auto !important;
+}
+
+/* Fix notification positioning */
+.fixed.top-4.right-4 {
+  z-index: 9999 !important;
+}
+
+/* IMPROVED: Notification width and layout */
+.notification-container > div {
+  min-width: 340px !important;
+  max-width: 420px !important;
+  width: auto !important;
+}
+
+/* Force proper display and override max-w-sm */
+.notification-container .max-w-sm {
+  max-width: none !important;
+}
+
+/* Better flex layout for content */
+.notification-container .flex.items-start {
+  align-items: flex-start !important;
+  gap: 0.75rem !important;
+}
+
+/* Improved text container */
+.notification-container .ml-3.w-0.flex-1 {
+  margin-left: 0 !important;
+  width: auto !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+/* Better message layout */
+.notification-container .text-sm {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+}
+
+/* Title spacing */
+.notification-container .text-sm.font-semibold {
+  margin-bottom: 0.25rem !important;
+}
+
+/* Close button positioning */
+.notification-container .ml-4.flex-shrink-0 {
+  margin-left: 0 !important;
+  align-self: flex-start !important;
+  margin-top: 0.125rem !important;
+}
+
+/* Ensure proper padding and spacing */
+.notification-container .p-4 {
+  padding: 1rem 1.25rem !important;
+}
+
+/* Notification color fixes for light theme */
+.bg-green-50 {
+  background-color: #f0fdf4 !important;
+}
+
+.bg-red-50 {
+  background-color: #fef2f2 !important;
+}
+
+.bg-yellow-50 {
+  background-color: #fefce8 !important;
+}
+
+.bg-blue-50 {
+  background-color: #eff6ff !important;
+}
+
+.text-green-800 {
+  color: #166534 !important;
+}
+
+.text-red-800 {
+  color: #991b1b !important;
+}
+
+.text-yellow-800 {
+  color: #92400e !important;
+}
+
+.text-blue-800 {
+  color: #1e40af !important;
+}
+
+.border-green-200 {
+  border-color: #bbf7d0 !important;
+}
+
+.border-red-200 {
+  border-color: #fecaca !important;
+}
+
+.border-yellow-200 {
+  border-color: #fde68a !important;
+}
+
+.border-blue-200 {
+  border-color: #bfdbfe !important;
+}
+
+/* Dark theme notification fixes */
+.dark .notification-container .bg-white {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+.dark .notification-container .bg-green-50 {
+  background-color: rgba(34, 197, 94, 0.1) !important;
+}
+
+.dark .notification-container .bg-red-50 {
+  background-color: rgba(220, 38, 38, 0.1) !important;
+}
+
+.dark .notification-container .bg-yellow-50 {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+}
+
+.dark .notification-container .bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+.dark .notification-container .text-green-800 {
+  color: #22c55e !important;
+}
+
+.dark .notification-container .text-red-800 {
+  color: #ef4444 !important;
+}
+
+.dark .notification-container .text-yellow-800 {
+  color: #f59e0b !important;
+}
+
+.dark .notification-container .text-blue-800 {
+  color: #3b82f6 !important;
+}
+
+.dark .notification-container .border-green-200 {
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+.dark .notification-container .border-red-200 {
+  border-color: rgba(220, 38, 38, 0.3) !important;
+}
+
+.dark .notification-container .border-yellow-200 {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.dark .notification-container .border-blue-200 {
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Notification shadows */
+.notification-container .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 
+              0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark .notification-container .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 
+              0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Ensure close button works properly */
+.notification-container button {
+  pointer-events: auto !important;
+}
+
+/* Animation improvements */
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out forwards !important;
+}
+
+/* Single comprehensive responsive rule */
+@media (max-width: 640px) {
+  .notification-container {
+    top: 0.5rem !important;
+    right: 0.5rem !important;
+    left: 0.5rem !important;
+  }
+  
+  .notification-container > div {
+    min-width: 280px !important;
+    max-width: calc(100vw - 2rem) !important;
+  }
+}
+
+/* FORCE NOTIFICATION FIX - Add at the very end */
+div[class*="max-w-sm"][class*="bg-white"][class*="shadow-lg"] {
+  min-width: 350px !important;
+  max-width: 450px !important;
+  width: auto !important;
+}
+
+/* Force the notification container styles */
+div[class*="fixed"][class*="top-4"][class*="right-4"] {
+  z-index: 9999 !important;
+}
+
+/* Force text alignment in notifications */
+div[class*="max-w-sm"] div[class*="flex"][class*="items-start"] {
+  text-align: left !important;
+}
+
+div[class*="max-w-sm"] div[class*="flex"][class*="items-start"] * {
+  text-align: left !important;
+}
+
+/* Force proper flex layout */
+div[class*="max-w-sm"] div[class*="ml-3"][class*="w-0"][class*="flex-1"] {
+  width: auto !important;
+  flex: 1 !important;
+  min-width: 200px !important;
+}
+
+/* Force proper message text layout */
+div[class*="max-w-sm"] p[class*="text-sm"] {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  line-height: 1.4 !important;
+  width: 100% !important;
+  display: block !important;
+}
