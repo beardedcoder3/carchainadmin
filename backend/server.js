@@ -1,4 +1,4 @@
-// backend/server.js - Fixed version with better MongoDB error handling
+// backend/server.js - Fixed version with separate public and protected routes
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -76,13 +76,24 @@ mongoose.connection.on('disconnected', () => {
   console.log('🔌 Mongoose disconnected');
 });
 
-// API routes
+// ============ FIXED: SEPARATE PUBLIC AND PROTECTED ROUTES ============
+
+// 1. First, add the PUBLIC routes (no authentication required)
+app.use('/api/reports/public', reportRoutes); // This handles /api/reports/public/:id
+
+// 2. Then add auth routes if available
 if (authRoutes) {
   app.use('/api/auth', authRoutes);
+}
+
+// 3. Finally, add PROTECTED routes
+if (authRoutes && protectReportRoutes) {
   app.use('/api/reports', protectReportRoutes, reportRoutes); // Protected routes
 } else {
   app.use('/api/reports', reportRoutes); // Unprotected routes for now
 }
+
+// =====================================================================
 
 // Test route
 app.get('/api', (req, res) => {
@@ -120,8 +131,6 @@ app.get('/api/test', (req, res) => {
   });
 });
 
-
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('❌ Server error:', err);
@@ -137,6 +146,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌐 API available at: http://localhost:${PORT}/api`);
   console.log(`🔍 Health check: http://localhost:${PORT}/api/health`);
+  console.log(`🌍 Public reports: http://localhost:${PORT}/api/reports/public/:id`);
   
   if (authRoutes) {
     console.log('🔐 Authentication enabled');
