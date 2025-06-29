@@ -18,7 +18,7 @@ const PublicReport = () => {
       setLoading(true);
       
       // Fetch report data - NO authentication required for public access
-     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/public/${reportId}`);
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${reportId}`);
       
       if (response.ok) {
         const data = await response.json();
