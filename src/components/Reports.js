@@ -320,10 +320,12 @@ const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${rep
 
 // Replace your current handleDownloadReport function with this:
 const handleDownloadReport = (report) => {
+  // Use the report's actual _id to create the public URL
   const publicUrl = `${window.location.origin}/public-report/${report._id}`;
   window.open(publicUrl, '_blank');
-  console.log('📄 Opened public report:', publicUrl);
+  console.log('📄 Opening public report:', publicUrl);
 };
+
 
   const generatePDFReport = (report) => {
     // Calculate category ratings based on inspection results

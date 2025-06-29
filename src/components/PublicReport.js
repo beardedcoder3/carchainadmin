@@ -13,26 +13,37 @@ const PublicReport = () => {
     fetchPublicReport();
   }, [reportId]);
 
-  const fetchPublicReport = async () => {
-    try {
-      setLoading(true);
-      
-      // Fetch report data - NO authentication required for public access
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${reportId}`);
-      
-      if (response.ok) {
-        const data = await response.json();
-        setReport(data);
-      } else {
-        throw new Error('Report not found');
+ const fetchPublicReport = async () => {
+  try {
+    setLoading(true);
+    console.log('🔍 Fetching public report with ID:', reportId);
+    
+    // This URL matches your backend route: /api/reports/public/:id
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/public/${reportId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // No Authorization header needed - this is public access
       }
-    } catch (error) {
-      console.error('❌ Error fetching public report:', error);
-      setError('Report not found or no longer available');
-    } finally {
-      setLoading(false);
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      console.log('✅ Successfully fetched public report');
+      setReport(data);
+    } else if (response.status === 404) {
+      throw new Error('Report not found');
+    } else {
+      throw new Error(`Error ${response.status}: Unable to load report`);
     }
-  };
+  } catch (error) {
+    console.error('❌ Error fetching public report:', error);
+    setError(error.message || 'Report not found or no longer available');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const calculateCategoryRating = (categoryItems) => {
     if (!categoryItems || Object.keys(categoryItems).length === 0) return 0;
