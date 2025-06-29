@@ -40,7 +40,7 @@ const Dashboard = () => {
     const token = localStorage.getItem('carchain_auth_token');
     
     console.log('🔄 Fetching reports from backend...');
-const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/reports`, {
+const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

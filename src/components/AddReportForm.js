@@ -987,7 +987,7 @@ const AddReportForm = ({ onSuccess }) => {
     // Get the auth token
     const token = localStorage.getItem('carchain_auth_token');
 
-   const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/reports`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

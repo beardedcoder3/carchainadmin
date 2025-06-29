@@ -84,7 +84,7 @@ const Reports = () => {
         headers['Authorization'] = `Bearer ${token}`;
       }
       
- const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/reports`, {
+const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports`, {
 
         headers: headers
       });
@@ -223,7 +223,7 @@ const Reports = () => {
       
       const token = localStorage.getItem('carchain_auth_token');
       
-const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/reports/${reportId}`, {
+const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${reportId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
