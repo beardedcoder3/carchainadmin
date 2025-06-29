@@ -294,7 +294,7 @@ const PublicReport = () => {
           </div>
 
           {/* Category Ratings */}
-          {report.inspectionResults && Object.keys(report.inspectionResults).length > 0 && (
+          {report.inspectionResults && (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
               <div className="px-8 py-6 border-b border-gray-200">
                 <h3 className="text-xl font-semibold text-gray-900 flex items-center">
@@ -309,22 +309,27 @@ const PublicReport = () => {
                   {Object.entries(report.inspectionResults).map(([category, items]) => {
                     // Calculate category rating based on items
                     const itemValues = Object.values(items);
-                    const goodCount = itemValues.filter(value => 
-                      ['Good', 'Ok', 'Working', 'Excellent', 'Clean', 'Normal', 'Smooth', 'Pass'].some(v => 
-                        value?.toLowerCase().includes(v.toLowerCase())
-                      )
-                    ).length;
-                    const fairCount = itemValues.filter(value => 
-                      ['Fair', 'Worn', 'Low', 'Weak', 'Minor', 'Average'].some(v => 
-                        value?.toLowerCase().includes(v.toLowerCase())
-                      )
-                    ).length;
-                    const poorCount = itemValues.length - goodCount - fairCount;
+                    const totalItems = itemValues.length;
+                    
+                    let goodCount = 0;
+                    let fairCount = 0;
+                    let poorCount = 0;
+                    
+                    itemValues.forEach(value => {
+                      const valueStr = String(value).toLowerCase();
+                      if (valueStr.includes('good') || valueStr.includes('excellent') || valueStr.includes('clean') || 
+                          valueStr.includes('normal') || valueStr.includes('working') || valueStr.includes('ok')) {
+                        goodCount++;
+                      } else if (valueStr.includes('fair') || valueStr.includes('worn') || valueStr.includes('low') || 
+                                valueStr.includes('weak') || valueStr.includes('minor') || valueStr.includes('average')) {
+                        fairCount++;
+                      } else {
+                        poorCount++;
+                      }
+                    });
                     
                     // Calculate rating (1-10 scale)
-                    const rating = Math.round(
-                      ((goodCount * 10) + (fairCount * 6) + (poorCount * 3)) / itemValues.length
-                    );
+                    const rating = totalItems > 0 ? Math.round(((goodCount * 10) + (fairCount * 6) + (poorCount * 3)) / totalItems) : 5;
                     
                     const ratingColor = rating >= 8 ? 'bg-green-500' : rating >= 6 ? 'bg-yellow-500' : 'bg-red-500';
                     const ratingBgColor = rating >= 8 ? 'bg-green-50' : rating >= 6 ? 'bg-yellow-50' : 'bg-red-50';
@@ -361,7 +366,7 @@ const PublicReport = () => {
                             <div className="w-full bg-green-200 rounded h-2 mb-1">
                               <div 
                                 className="bg-green-500 h-full rounded" 
-                                style={{ width: `${(goodCount / itemValues.length) * 100}%` }}
+                                style={{ width: `${totalItems > 0 ? (goodCount / totalItems) * 100 : 0}%` }}
                               ></div>
                             </div>
                             <span className="text-green-700 font-medium">{goodCount} Good</span>
@@ -370,7 +375,7 @@ const PublicReport = () => {
                             <div className="w-full bg-yellow-200 rounded h-2 mb-1">
                               <div 
                                 className="bg-yellow-500 h-full rounded" 
-                                style={{ width: `${(fairCount / itemValues.length) * 100}%` }}
+                                style={{ width: `${totalItems > 0 ? (fairCount / totalItems) * 100 : 0}%` }}
                               ></div>
                             </div>
                             <span className="text-yellow-700 font-medium">{fairCount} Fair</span>
@@ -379,7 +384,7 @@ const PublicReport = () => {
                             <div className="w-full bg-red-200 rounded h-2 mb-1">
                               <div 
                                 className="bg-red-500 h-full rounded" 
-                                style={{ width: `${(poorCount / itemValues.length) * 100}%` }}
+                                style={{ width: `${totalItems > 0 ? (poorCount / totalItems) * 100 : 0}%` }}
                               ></div>
                             </div>
                             <span className="text-red-700 font-medium">{poorCount} Poor</span>
@@ -389,7 +394,7 @@ const PublicReport = () => {
                         {/* Items Count */}
                         <div className="mt-4 pt-4 border-t border-gray-200">
                           <p className="text-sm text-gray-600">
-                            <span className="font-medium">{itemValues.length}</span> components inspected
+                            <span className="font-medium">{totalItems}</span> components inspected
                           </p>
                         </div>
                       </div>
@@ -406,17 +411,24 @@ const PublicReport = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {(() => {
                       const allItems = Object.values(report.inspectionResults).flatMap(items => Object.values(items));
-                      const totalGood = allItems.filter(value => 
-                        ['Good', 'Ok', 'Working', 'Excellent', 'Clean', 'Normal', 'Smooth', 'Pass'].some(v => 
-                          value?.toLowerCase().includes(v.toLowerCase())
-                        )
-                      ).length;
-                      const totalFair = allItems.filter(value => 
-                        ['Fair', 'Worn', 'Low', 'Weak', 'Minor', 'Average'].some(v => 
-                          value?.toLowerCase().includes(v.toLowerCase())
-                        )
-                      ).length;
-                      const totalPoor = allItems.length - totalGood - totalFair;
+                      let totalGood = 0;
+                      let totalFair = 0;
+                      let totalPoor = 0;
+                      
+                      allItems.forEach(value => {
+                        const valueStr = String(value).toLowerCase();
+                        if (valueStr.includes('good') || valueStr.includes('excellent') || valueStr.includes('clean') || 
+                            valueStr.includes('normal') || valueStr.includes('working') || valueStr.includes('ok')) {
+                          totalGood++;
+                        } else if (valueStr.includes('fair') || valueStr.includes('worn') || valueStr.includes('low') || 
+                                  valueStr.includes('weak') || valueStr.includes('minor') || valueStr.includes('average')) {
+                          totalFair++;
+                        } else {
+                          totalPoor++;
+                        }
+                      });
+                      
+                      const totalItems = allItems.length;
                       
                       return [
                         { label: 'Good Condition', count: totalGood, color: 'text-green-600', bg: 'bg-green-100' },
@@ -427,12 +439,11 @@ const PublicReport = () => {
                           <div className={`text-2xl font-bold ${stat.color} mb-1`}>{stat.count}</div>
                           <div className="text-sm font-medium text-gray-700">{stat.label}</div>
                           <div className="text-xs text-gray-600 mt-1">
-                            {Math.round((stat.count / allItems.length) * 100)}% of total
+                            {totalItems > 0 ? Math.round((stat.count / totalItems) * 100) : 0}% of total
                           </div>
                         </div>
                       ));
-                    })()}
-                  </div>
+                    })()}                  </div>
                 </div>
               </div>
             </div>
