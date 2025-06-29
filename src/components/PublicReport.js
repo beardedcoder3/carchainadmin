@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Download, Car, Calendar, User, MapPin, Star, Shield, FileText, Phone, Mail, CheckCircle } from 'lucide-react';
-import logo from '../logo.png'; // Import the logo
+import logo from './logo.png'; // Import the logo
 
 const PublicReport = () => {
   const { reportId } = useParams();
