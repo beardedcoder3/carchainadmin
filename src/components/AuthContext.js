@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('carchain_auth_token');
       if (token) {
         // Verify token with backend
-        const response = await fetch('http://localhost:5000/api/auth/verify', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/verify`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('carchain_auth_token');
       if (token) {
-        await fetch('http://localhost:5000/api/auth/logout', {
+        await fetch(`${process.env.REACT_APP_API_URL}/api/auth/logout`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
   const changePassword = async (currentPassword, newPassword) => {
     try {
       const token = localStorage.getItem('carchain_auth_token');
-      const response = await fetch('http://localhost:5000/api/auth/change-password', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/change-password`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
