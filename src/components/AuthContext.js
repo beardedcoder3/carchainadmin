@@ -1,4 +1,4 @@
-// AuthContext.js - Authentication Context Provider
+// AuthContext.js - Authentication Context Provider (FIXED VERSION)
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
@@ -16,6 +16,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Get API URL from environment variable
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
   // Check if user is already logged in on app start
   useEffect(() => {
     checkAuthStatus();
@@ -26,7 +29,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('carchain_auth_token');
       if (token) {
         // Verify token with backend
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/verify`, {
+        const response = await fetch(`${API_URL}/api/auth/verify`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -56,7 +59,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -84,7 +87,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('carchain_auth_token');
       if (token) {
-        await fetch(`${process.env.REACT_APP_API_URL}/api/auth/logout`, {
+        await fetch(`${API_URL}/api/auth/logout`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -104,7 +107,7 @@ export const AuthProvider = ({ children }) => {
   const changePassword = async (currentPassword, newPassword) => {
     try {
       const token = localStorage.getItem('carchain_auth_token');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/change-password`, {
+      const response = await fetch(`${API_URL}/api/auth/change-password`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -132,4 +135,3 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
