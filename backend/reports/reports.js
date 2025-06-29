@@ -3,6 +3,50 @@ const express = require('express');
 const router = express.Router();
 const Report = require('../models/Report');
 
+router.post('/share', async (req, res) => {
+  try {
+    const { reportId, reportData, shareToken, expiresAt } = req.body;
+    
+    // Store the shareable report data (you can use MongoDB or a simple file)
+    const shareableReport = {
+      shareToken,
+      reportId,
+      reportData,
+      createdAt: new Date(),
+      expiresAt: new Date(expiresAt)
+    };
+    
+    // Save to database or file system
+    // For now, you could store in memory or a JSON file
+    
+    res.json({
+      success: true,
+      shareToken,
+      message: 'Shareable link created successfully'
+    });
+    
+  } catch (error) {
+    console.error('Error creating shareable link:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// GET /public-report/:shareToken - Public report view
+router.get('/public-report/:shareToken', async (req, res) => {
+  try {
+    const { shareToken } = req.params;
+    
+    // Find the shared report by token
+    // const sharedReport = await findSharedReport(shareToken);
+    
+    // Generate and return the HTML report
+    // Similar to your current generatePDFReport function
+    
+  } catch (error) {
+    res.status(404).send('Report not found or expired');
+  }
+});
+
 // GET all reports
  router.get('/', async (req, res) => {
   try {

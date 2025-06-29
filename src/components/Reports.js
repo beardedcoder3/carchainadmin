@@ -195,6 +195,80 @@ const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports`, {
     setFilteredReports(filtered);
   };
 
+  const handleShareableReport = async (report) => {
+  try {
+    console.log('🔗 Creating shareable report link for:', report._id);
+    
+    // First, save the report data to your backend with a shareable token
+    const shareToken = generateShareToken();
+    
+    const shareData = {
+      reportId: report._id,
+      reportData: report,
+      shareToken: shareToken,
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days
+    };
+    
+    const token = localStorage.getItem('carchain_auth_token');
+    
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/share`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(shareData),
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      const shareableUrl = `${window.location.origin}/public-report/${result.shareToken}`;
+      
+      // Copy to clipboard and show success message
+      await navigator.clipboard.writeText(shareableUrl);
+      
+      // Show custom alert or modal with the link
+      showShareModal(shareableUrl, report);
+      
+      console.log('✅ Shareable link created:', shareableUrl);
+    } else {
+      throw new Error('Failed to create shareable link');
+    }
+    
+  } catch (error) {
+    console.error('❌ Error creating shareable link:', error);
+    alert('Error creating shareable link. Please try again.');
+  }
+};
+
+// Generate a unique share token
+const generateShareToken = () => {
+  return 'share_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+};
+
+// Show modal with shareable link
+const showShareModal = (shareableUrl, report) => {
+  // You can replace this with a proper modal component
+  const message = `
+Shareable Report Link Created!
+
+Vehicle: ${report.year} ${report.make} ${report.model}
+Registration: ${report.registrationNo}
+
+Link: ${shareableUrl}
+
+The link has been copied to your clipboard and is valid for 30 days.
+Anyone with this link can view the inspection report.
+  `;
+  
+  alert(message);
+  
+  // Optional: Open the link in a new tab to test
+  // window.open(shareableUrl, '_blank');
+};
+
+
   const handleFilterChange = (field, value) => {
     setSearchFilters(prev => ({ ...prev, [field]: value }));
   };
@@ -244,11 +318,485 @@ const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${rep
     }
   };
 
-  const handleDownloadReport = (report) => {
-    console.log('📄 Generating PDF for report:', report._id);
-    generatePDFReport(report);
+// Replace your existing handleDownloadReport function with this enhanced version
+
+const handleDownloadReport = (report) => {
+  console.log('📄 Generating professional PDF for report:', report._id);
+  generateProfessionalPDF(report);
+};
+
+const generateProfessionalPDF = (report) => {
+  // Calculate category ratings
+  const calculateCategoryRating = (categoryItems) => {
+    if (!categoryItems || Object.keys(categoryItems).length === 0) return 0;
+    
+    const values = Object.values(categoryItems);
+    const scores = values.map(value => {
+      const lowerValue = value.toLowerCase();
+      if (['excellent', 'good', 'working', 'clean', 'normal', 'smooth'].includes(lowerValue)) return 10;
+      if (['ok', 'fair', 'worn', 'low', 'weak', 'minor'].includes(lowerValue)) return 6;
+      return 3;
+    });
+    
+    return Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length * 10) / 10;
   };
 
+  const categoryRatings = {};
+  if (report.inspectionResults) {
+    Object.keys(report.inspectionResults).forEach(category => {
+      categoryRatings[category] = calculateCategoryRating(report.inspectionResults[category]);
+    });
+  }
+
+  // Create filename with current timestamp
+  const timestamp = new Date().toISOString().split('T')[0];
+  const filename = `Car-Inspection-Report-${report.registrationNo}-${timestamp}.pdf`;
+
+  const reportContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Car Inspection Report - ${report.registrationNo}</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        @media print {
+          body { margin: 0; }
+          .no-print { display: none; }
+          .page-break { page-break-before: always; }
+        }
+        
+        body { 
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+          margin: 0; 
+          padding: 20px; 
+          line-height: 1.6; 
+          color: #1a202c; 
+          background: #ffffff; 
+        }
+        
+        .container { 
+          max-width: 800px; 
+          margin: 0 auto; 
+          background: white; 
+          padding: 40px; 
+          border-radius: 12px; 
+          box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+        }
+        
+        .header { 
+          text-align: center; 
+          border-bottom: 3px solid #dc2626; 
+          padding-bottom: 30px; 
+          margin-bottom: 40px; 
+        }
+        
+        .logo-section {
+          background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+          color: white;
+          padding: 20px;
+          border-radius: 12px;
+          margin-bottom: 20px;
+        }
+        
+        .company-name {
+          font-size: 32px;
+          font-weight: 900;
+          margin-bottom: 5px;
+          letter-spacing: 2px;
+        }
+        
+        .tagline { 
+          color: rgba(255,255,255,0.9); 
+          font-size: 14px; 
+          text-transform: uppercase; 
+          letter-spacing: 1px; 
+          margin-bottom: 8px; 
+        }
+        
+        .title { 
+          font-size: 24px; 
+          font-weight: 600; 
+          margin-top: 20px; 
+          color: #1a202c; 
+        }
+        
+        .vehicle-header { 
+          display: flex; 
+          align-items: center; 
+          margin: 40px 0; 
+          padding: 30px; 
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); 
+          border-radius: 12px; 
+          border: 1px solid #e2e8f0;
+        }
+        
+        .vehicle-image { 
+          width: 200px; 
+          height: 130px; 
+          border-radius: 8px; 
+          margin-right: 40px; 
+          overflow: hidden; 
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+          background: #f1f5f9;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .vehicle-image img { 
+          width: 100%; 
+          height: 100%; 
+          object-fit: cover; 
+        }
+        
+        .rating-section { 
+          flex: 1; 
+          text-align: center; 
+        }
+        
+        .vehicle-title { 
+          font-size: 28px; 
+          font-weight: 700; 
+          margin-bottom: 20px; 
+          color: #1a202c; 
+        }
+        
+        .rating-circle { 
+          width: 120px; 
+          height: 120px; 
+          border: 6px solid #dc2626; 
+          border-radius: 50%; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          margin: 0 auto; 
+          background: white; 
+          box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2); 
+        }
+        
+        .rating-text { 
+          font-size: 28px; 
+          font-weight: bold; 
+          color: #dc2626; 
+        }
+        
+        .rating-label { 
+          font-weight: 600; 
+          margin-top: 15px; 
+          color: #475569; 
+        }
+        
+        .details-section { 
+          margin: 40px 0; 
+        }
+        
+        .section-title { 
+          font-size: 20px; 
+          font-weight: 700; 
+          margin-bottom: 20px; 
+          color: #1a202c; 
+          padding-bottom: 10px; 
+          border-bottom: 2px solid #dc2626; 
+        }
+        
+        .details-grid { 
+          display: grid; 
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+          gap: 20px; 
+        }
+        
+        .detail-card { 
+          background: #f8fafc; 
+          padding: 20px; 
+          border-radius: 8px; 
+          border-left: 4px solid #dc2626; 
+        }
+        
+        .detail-label { 
+          font-size: 12px; 
+          font-weight: 600; 
+          color: #64748b; 
+          text-transform: uppercase; 
+          letter-spacing: 0.5px; 
+          margin-bottom: 8px; 
+        }
+        
+        .detail-value { 
+          font-size: 16px; 
+          font-weight: 500; 
+          color: #1a202c; 
+        }
+        
+        .inspection-section { 
+          margin: 40px 0; 
+        }
+        
+        .category-card { 
+          background: white; 
+          border: 1px solid #e2e8f0; 
+          border-radius: 12px; 
+          margin-bottom: 24px; 
+          overflow: hidden; 
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+        }
+        
+        .category-header { 
+          background: #1e293b; 
+          color: white; 
+          padding: 16px 24px; 
+          font-size: 16px; 
+          font-weight: 600; 
+          text-transform: uppercase; 
+          letter-spacing: 0.5px; 
+        }
+        
+        .inspection-items { 
+          padding: 0; 
+        }
+        
+        .inspection-item { 
+          display: flex; 
+          justify-content: space-between; 
+          align-items: center; 
+          padding: 16px 24px; 
+          border-bottom: 1px solid #f1f5f9; 
+        }
+        
+        .inspection-item:last-child { 
+          border-bottom: none; 
+        }
+        
+        .item-name { 
+          flex: 1; 
+          font-weight: 500; 
+          color: #374151; 
+        }
+        
+        .item-status { 
+          padding: 6px 12px; 
+          border-radius: 20px; 
+          font-size: 12px; 
+          font-weight: 600; 
+          text-transform: uppercase; 
+        }
+        
+        .status-good { 
+          background: #dcfce7; 
+          color: #166534; 
+        }
+        
+        .status-fair { 
+          background: #fef3c7; 
+          color: #92400e; 
+        }
+        
+        .status-poor { 
+          background: #fee2e2; 
+          color: #991b1b; 
+        }
+        
+        .footer { 
+          text-align: center; 
+          margin-top: 50px; 
+          padding-top: 30px; 
+          border-top: 2px solid #e2e8f0; 
+          color: #64748b; 
+        }
+        
+        .footer-date { 
+          font-weight: 600; 
+          margin-bottom: 8px; 
+        }
+        
+        .download-actions {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: white;
+          padding: 20px;
+          border-radius: 12px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+          border: 1px solid #e2e8f0;
+          z-index: 1000;
+        }
+        
+        .download-btn {
+          background: #dc2626;
+          color: white;
+          padding: 12px 24px;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          margin-right: 10px;
+          transition: all 0.2s;
+        }
+        
+        .download-btn:hover {
+          background: #991b1b;
+          transform: translateY(-1px);
+        }
+        
+        .share-btn {
+          background: #059669;
+          color: white;
+          padding: 12px 24px;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        
+        .share-btn:hover {
+          background: #047857;
+          transform: translateY(-1px);
+        }
+      </style>
+    </head>
+    <body>
+      <!-- Download Actions (Only visible on screen) -->
+      <div class="download-actions no-print">
+        <button class="download-btn" onclick="window.print()">📄 Download PDF</button>
+        <button class="share-btn" onclick="copyLink()">🔗 Copy Link</button>
+      </div>
+      
+      <div class="container">
+        <div class="header">
+          <div class="logo-section">
+            <div class="company-name">CAR2CHAIN</div>
+            <div class="tagline">Professional Vehicle Inspection Services</div>
+          </div>
+          <div class="title">Official Vehicle Inspection Report</div>
+        </div>
+
+        <div class="vehicle-header">
+          <div class="vehicle-image">
+            ${report.vehicleImage 
+              ? `<img src="${report.vehicleImage}" alt="Vehicle" />` 
+              : `<div style="color: #94a3b8; font-size: 14px; text-align: center;">Vehicle<br>Image<br>Not Available</div>`
+            }
+          </div>
+          <div class="rating-section">
+            <div class="vehicle-title">${report.year} ${report.make} ${report.model}</div>
+            <div class="rating-circle">
+              <div class="rating-text">${report.overallRating}/10</div>
+            </div>
+            <div class="rating-label">Overall Rating</div>
+          </div>
+        </div>
+
+        <div class="details-section">
+          <div class="section-title">Vehicle Information</div>
+          <div class="details-grid">
+            <div class="detail-card">
+              <div class="detail-label">Customer/Dealer Name</div>
+              <div class="detail-value">${report.customerName}</div>
+            </div>
+            <div class="detail-card">
+              <div class="detail-label">Registration Number</div>
+              <div class="detail-value">${report.registrationNo}</div>
+            </div>
+            <div class="detail-card">
+              <div class="detail-label">Chassis Number</div>
+              <div class="detail-value">${report.chassisNo}</div>
+            </div>
+            <div class="detail-card">
+              <div class="detail-label">Engine Number</div>
+              <div class="detail-value">${report.engineNo}</div>
+            </div>
+            <div class="detail-card">
+              <div class="detail-label">Location</div>
+              <div class="detail-value">${report.location}</div>
+            </div>
+            <div class="detail-card">
+              <div class="detail-label">Inspection Date</div>
+              <div class="detail-value">${new Date(report.inspectionDate).toLocaleDateString()}</div>
+            </div>
+            <div class="detail-card">
+              <div class="detail-label">Inspector</div>
+              <div class="detail-value">${report.inspector}</div>
+            </div>
+            <div class="detail-card">
+              <div class="detail-label">Report Generated</div>
+              <div class="detail-value">${new Date().toLocaleDateString()}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="inspection-section">
+          <div class="section-title">Detailed Inspection Results</div>
+          ${Object.keys(report.inspectionResults || {}).map(category => `
+            <div class="category-card">
+              <div class="category-header">${category.toUpperCase()}</div>
+              <div class="inspection-items">
+                ${Object.entries(report.inspectionResults[category] || {}).map(([item, value]) => {
+                  const statusClass = ['Good', 'Ok', 'Working', 'Excellent', 'Clean', 'Normal', 'Smooth'].includes(value) 
+                    ? 'status-good' 
+                    : ['Fair', 'Worn', 'Low', 'Weak', 'Minor'].includes(value) 
+                    ? 'status-fair' 
+                    : 'status-poor';
+                  
+                  return `
+                    <div class="inspection-item">
+                      <div class="item-name">${item}</div>
+                      <div class="item-status ${statusClass}">${value}</div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        ${report.comments ? `
+          <div class="details-section">
+            <div class="section-title">Additional Comments</div>
+            <div class="detail-card">
+              <div class="detail-value">${report.comments}</div>
+            </div>
+          </div>
+        ` : ''}
+
+        <div class="footer">
+          <div class="footer-date">Report Generated: ${new Date().toLocaleDateString()}</div>
+          <div>Car2Chain Professional Inspection Services</div>
+          <div style="margin-top: 10px; font-size: 12px;">
+            Inspector: ${report.inspector} | Report ID: ${report._id || 'N/A'}
+          </div>
+        </div>
+      </div>
+
+      <script>
+        function copyLink() {
+          navigator.clipboard.writeText(window.location.href).then(() => {
+            alert('✅ Report link copied to clipboard!\\n\\nShare this link with anyone who needs to view this inspection report.');
+          }).catch(() => {
+            alert('❌ Failed to copy link. Please copy the URL manually from your browser address bar.');
+          });
+        }
+        
+        // Auto-focus print dialog after page loads
+        window.addEventListener('load', function() {
+          // Optional: Auto-print after 1 second
+          // setTimeout(() => window.print(), 1000);
+        });
+      </script>
+    </body>
+    </html>
+  `;
+
+  // Open in new window with enhanced features
+  const newWindow = window.open('', '_blank', 'width=1024,height=768,scrollbars=yes,resizable=yes');
+  newWindow.document.write(reportContent);
+  newWindow.document.close();
+  
+  // Set the window title
+  newWindow.document.title = `Inspection Report - ${report.registrationNo}`;
+  
+  console.log('✅ Professional PDF report opened in new window');
+};
 
   const generatePDFReport = (report) => {
     // Calculate category ratings based on inspection results
@@ -714,13 +1262,13 @@ const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${rep
                       <Eye className="w-4 h-4 mr-1" />
                       View
                     </button>
-                    <button
-                      onClick={() => handleDownloadReport(report)}
-                      className="flex-1 inline-flex items-center justify-center px-3 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-all duration-200 text-sm font-medium"
-                    >
-                      <Download className="w-4 h-4 mr-1" />
-                      PDF
-                    </button>
+                   <button
+  onClick={() => handleShareableReport(report)}
+  className="flex-1 inline-flex items-center justify-center px-3 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-all duration-200 text-sm font-medium"
+>
+  <Download className="w-4 h-4 mr-1" />
+  Share PDF
+</button>
                     <button
                       onClick={() => handleEditReport(report)}
                       className="inline-flex items-center justify-center px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-all duration-200 text-sm font-medium"
