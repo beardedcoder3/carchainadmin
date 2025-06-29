@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Download, Car, Calendar, User, MapPin, Star, Shield, FileText, Phone, Mail } from 'lucide-react';
-import logo from './logo.png'; // Import the logo
+import logo from '../logo.png'; // Import the logo
 
 const PublicReport = () => {
   const { reportId } = useParams();
@@ -166,18 +166,11 @@ const PublicReport = () => {
                       className="h-20 w-auto mx-auto filter brightness-0 invert"
                     />
                   </div>
-                  <p className="text-red-100 text-lg uppercase tracking-[0.3em] font-medium">
-                    Professional Vehicle Inspection Services
-                  </p>
                 </div>
                 
                 {/* Report Title */}
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 inline-block border border-white/20">
-                  <h1 className="text-4xl font-bold mb-2">Official Inspection Report</h1>
-                  <div className="flex items-center justify-center space-x-3 text-red-100">
-                    <Shield className="w-5 h-5" />
-                    <span className="text-lg">Certified • Verified • Professional</span>
-                  </div>
+                  <h1 className="text-4xl font-bold mb-2">Vehicle Inspection Report</h1>
                 </div>
               </div>
             </div>
@@ -424,8 +417,7 @@ const PublicReport = () => {
                   alt="Car2Chain Logo" 
                   className="h-16 w-auto mx-auto mb-6 filter brightness-0 invert"
                 />
-                <h4 className="text-3xl font-bold mb-4">Car2Chain Professional Inspection Services</h4>
-                <p className="text-xl text-slate-300 mb-8">Trusted • Certified • Professional</p>
+                <h4 className="text-3xl font-bold mb-4">Car2Chain Inspection Services</h4>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
@@ -452,7 +444,7 @@ const PublicReport = () => {
               
               <div className="border-t border-slate-700 pt-8">
                 <p className="text-slate-400 text-sm leading-relaxed">
-                  This is an official vehicle inspection report certified by Car2Chain Professional Services. 
+                  This is an official vehicle inspection report. 
                   For verification or inquiries, please contact our support team with the report ID mentioned above.
                 </p>
               </div>
