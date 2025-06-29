@@ -119,7 +119,7 @@ const PublicReport = () => {
             className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg shadow-lg font-medium transition-colors flex items-center space-x-2"
           >
             <Download className="w-5 h-5" />
-            <span>Download PDF</span>
+           
           </button>
         </div>
 
