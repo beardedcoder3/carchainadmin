@@ -1,7 +1,8 @@
-// 1. UPDATED PublicReport.js - Completely standalone, no admin layout
+// Professional PublicReport.js with logo and better design
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Download, Car, Calendar, User, MapPin, Star } from 'lucide-react';
+import { Download, Car, Calendar, User, MapPin, Star, Shield, FileText, Phone, Mail } from 'lucide-react';
+import logo from './logo.png'; // Import the logo
 
 const PublicReport = () => {
   const { reportId } = useParams();
@@ -18,12 +19,10 @@ const PublicReport = () => {
       setLoading(true);
       console.log('🔍 Fetching public report with ID:', reportId);
       
-      // Fetch from the public endpoint - NO authentication needed
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/public/${reportId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          // Explicitly NO Authorization header
         }
       });
       
@@ -51,11 +50,17 @@ const PublicReport = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-600 mx-auto mb-6"></div>
-          <p className="text-gray-600 text-lg">Loading inspection report...</p>
-          <p className="text-gray-400 text-sm mt-2">Report ID: {reportId}</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+        <div className="text-center bg-white p-12 rounded-2xl shadow-2xl border border-slate-200">
+          <div className="relative">
+            <div className="animate-spin rounded-full h-20 w-20 border-b-4 border-red-600 mx-auto mb-8"></div>
+            <div className="absolute inset-0 rounded-full h-20 w-20 border-t-4 border-red-200 mx-auto animate-pulse"></div>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-800 mb-4">Loading Inspection Report</h2>
+          <p className="text-slate-600 text-lg mb-2">Retrieving vehicle inspection data...</p>
+          <p className="text-slate-400 text-sm font-mono bg-slate-50 px-4 py-2 rounded-lg inline-block">
+            Report ID: {reportId}
+          </p>
         </div>
       </div>
     );
@@ -63,14 +68,28 @@ const PublicReport = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center bg-white p-12 rounded-2xl shadow-lg border border-gray-200 max-w-lg mx-4">
-          <div className="text-red-500 text-8xl mb-6">🚗</div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Report Not Found</h1>
-          <p className="text-gray-600 mb-6 text-lg">{error}</p>
-          <p className="text-sm text-gray-500 mb-8">The report may have been removed or the link is invalid.</p>
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="text-xs text-gray-400">Report ID: {reportId}</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
+        <div className="text-center bg-white p-12 rounded-2xl shadow-2xl border border-slate-200 max-w-2xl">
+          <div className="mb-8">
+            <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <FileText className="w-12 h-12 text-red-600" />
+            </div>
+          </div>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">Report Not Found</h1>
+          <p className="text-xl text-slate-600 mb-6">{error}</p>
+          <div className="bg-slate-50 p-6 rounded-xl mb-8">
+            <p className="text-sm text-slate-500 mb-2">The inspection report you're looking for may have been:</p>
+            <ul className="text-sm text-slate-600 space-y-1">
+              <li>• Removed or archived</li>
+              <li>• Accessed with an invalid link</li>
+              <li>• Temporarily unavailable</li>
+            </ul>
+          </div>
+          <div className="bg-slate-100 p-4 rounded-lg">
+            <p className="text-xs text-slate-400 font-mono">Report ID: {reportId}</p>
+          </div>
+          <div className="mt-8 pt-8 border-t border-slate-200">
+            <p className="text-sm text-slate-500">Need assistance? Contact Car2Chain support</p>
           </div>
         </div>
       </div>
@@ -81,186 +100,291 @@ const PublicReport = () => {
 
   return (
     <>
-      {/* Print Styles - Hide print button when printing */}
+      {/* Enhanced Print Styles */}
       <style jsx>{`
         @media print {
           .no-print { display: none !important; }
-          body { margin: 0; padding: 0; }
+          body { margin: 0; padding: 0; color: #000 !important; }
           .print-container { box-shadow: none !important; margin: 0 !important; }
+          .bg-gradient-to-r { background: #dc2626 !important; }
+          .bg-gradient-to-br { background: #f8fafc !important; }
+          .shadow-2xl, .shadow-xl, .shadow-lg { box-shadow: none !important; }
         }
         
         @page {
-          margin: 1in;
+          margin: 0.75in;
           size: A4;
+        }
+
+        .gradient-border {
+          background: linear-gradient(135deg, #dc2626, #ef4444, #f87171);
+          padding: 3px;
+          border-radius: 16px;
+        }
+        
+        .gradient-border-inner {
+          background: white;
+          border-radius: 13px;
+          height: 100%;
         }
       `}</style>
 
-      {/* Full screen standalone layout - NO admin sidebar */}
-      <div className="min-h-screen bg-gray-50">
+      {/* Professional Layout */}
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
         
-        {/* Floating Print Button - Hidden when printing */}
-        <div className="no-print fixed top-8 right-8 z-50">
+        {/* Floating Action Buttons */}
+        <div className="no-print fixed top-8 right-8 z-50 space-y-4">
           <button
             onClick={handlePrint}
-            className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl shadow-2xl font-bold transition-all duration-300 transform hover:scale-105 flex items-center space-x-3 text-lg"
+            className="group bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-2xl shadow-2xl font-bold transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 flex items-center space-x-3 text-lg border-2 border-red-700"
           >
-            <Download className="w-6 h-6" />
+            <Download className="w-6 h-6 group-hover:animate-pulse" />
             <span>Download PDF</span>
           </button>
         </div>
 
-        {/* Report Content */}
-        <div className="print-container max-w-5xl mx-auto py-12 px-6">
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-            
-            {/* Header Section */}
-            <div className="bg-gradient-to-r from-red-600 via-red-700 to-red-800 text-white p-12 text-center">
-              <div className="mb-6">
-                <h1 className="text-5xl font-bold tracking-wider mb-4">CAR2CHAIN</h1>
-                <p className="text-red-100 text-lg uppercase tracking-widest">Professional Vehicle Inspection Services</p>
+        {/* Main Report Container */}
+        <div className="print-container max-w-6xl mx-auto py-8 px-4">
+          
+          {/* Professional Header */}
+          <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden mb-8">
+            <div className="bg-gradient-to-r from-red-600 via-red-700 to-red-800 text-white relative overflow-hidden">
+              {/* Background Pattern */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute inset-0" style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                }}></div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 inline-block">
-                <h2 className="text-3xl font-bold">Official Inspection Report</h2>
+              
+              <div className="relative z-10 p-12 text-center">
+                {/* Logo Section */}
+                <div className="mb-8">
+                  <div className="inline-block bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-6">
+                    <img 
+                      src={logo} 
+                      alt="Car2Chain Logo" 
+                      className="h-20 w-auto mx-auto filter brightness-0 invert"
+                    />
+                  </div>
+                  <p className="text-red-100 text-lg uppercase tracking-[0.3em] font-medium">
+                    Professional Vehicle Inspection Services
+                  </p>
+                </div>
+                
+                {/* Report Title */}
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 inline-block border border-white/20">
+                  <h1 className="text-4xl font-bold mb-2">Official Inspection Report</h1>
+                  <div className="flex items-center justify-center space-x-3 text-red-100">
+                    <Shield className="w-5 h-5" />
+                    <span className="text-lg">Certified • Verified • Professional</span>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Vehicle Summary Section */}
-            <div className="p-12 bg-gradient-to-br from-gray-50 to-white border-b border-gray-200">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+            <div className="p-12 bg-gradient-to-br from-slate-50 to-white">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
                 {/* Vehicle Image */}
-                <div className="lg:col-span-1">
-                  <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-lg border-4 border-white">
-                    {report.vehicleImage ? (
-                      <img 
-                        src={report.vehicleImage} 
-                        alt="Vehicle" 
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <div className="text-center">
-                          <Car className="w-20 h-20 mx-auto mb-4" />
-                          <p className="text-lg font-medium">No Image Available</p>
-                        </div>
+                <div className="lg:col-span-4">
+                  <div className="gradient-border">
+                    <div className="gradient-border-inner p-4">
+                      <div className="aspect-video bg-slate-100 rounded-xl overflow-hidden">
+                        {report.vehicleImage ? (
+                          <img 
+                            src={report.vehicleImage} 
+                            alt="Vehicle" 
+                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-400 bg-gradient-to-br from-slate-50 to-slate-100">
+                            <div className="text-center">
+                              <Car className="w-16 h-16 mx-auto mb-4 text-slate-300" />
+                              <p className="text-lg font-medium text-slate-400">Vehicle Image</p>
+                              <p className="text-sm text-slate-300">Not Available</p>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
 
                 {/* Vehicle Details */}
-                <div className="lg:col-span-1">
-                  <h3 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
-                    {report.year} {report.make} {report.model}
-                  </h3>
-                  <div className="space-y-4 text-lg">
-                    <div className="flex items-center bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                      <Car className="w-5 h-5 mr-3 text-gray-500" />
-                      <span className="font-bold mr-3 text-gray-700">Registration:</span> 
-                      <span className="text-gray-900 font-mono">{report.registrationNo}</span>
-                    </div>
-                    <div className="flex items-center bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                      <User className="w-5 h-5 mr-3 text-gray-500" />
-                      <span className="font-bold mr-3 text-gray-700">Customer:</span> 
-                      <span className="text-gray-900">{report.customerName}</span>
-                    </div>
-                    <div className="flex items-center bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                      <MapPin className="w-5 h-5 mr-3 text-gray-500" />
-                      <span className="font-bold mr-3 text-gray-700">Location:</span> 
-                      <span className="text-gray-900">{report.location}</span>
-                    </div>
-                    <div className="flex items-center bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                      <Calendar className="w-5 h-5 mr-3 text-gray-500" />
-                      <span className="font-bold mr-3 text-gray-700">Inspection Date:</span> 
-                      <span className="text-gray-900">{new Date(report.inspectionDate).toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex items-center bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                      <User className="w-5 h-5 mr-3 text-gray-500" />
-                      <span className="font-bold mr-3 text-gray-700">Inspector:</span> 
-                      <span className="text-gray-900">{report.inspector}</span>
-                    </div>
+                <div className="lg:col-span-5">
+                  <div className="mb-8">
+                    <h2 className="text-5xl font-bold text-slate-900 mb-3 leading-tight">
+                      {report.year} {report.make}
+                    </h2>
+                    <h3 className="text-3xl font-semibold text-slate-700 mb-6">
+                      {report.model} {report.variant && `• ${report.variant}`}
+                    </h3>
                   </div>
-                </div>
-
-                {/* Overall Rating */}
-                <div className="lg:col-span-1 text-center">
-                  <div className="relative inline-block">
-                    <div className="w-48 h-48 bg-white border-8 border-red-600 rounded-full shadow-2xl flex items-center justify-center mx-auto">
+                  
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="flex items-center bg-white p-5 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                      <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mr-4">
+                        <Car className="w-6 h-6 text-red-600" />
+                      </div>
                       <div>
-                        <div className="text-6xl font-black text-red-600">{report.overallRating}</div>
-                        <div className="text-xl font-bold text-gray-600">/10</div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Registration</p>
+                        <p className="text-xl font-bold text-slate-900 font-mono">{report.registrationNo}</p>
                       </div>
                     </div>
-                    <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-2 rounded-full">
-                      <Star className="w-5 h-5 inline mr-2" />
-                      <span className="font-bold">Overall Rating</span>
+                    
+                    <div className="flex items-center bg-white p-5 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4">
+                        <User className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Customer</p>
+                        <p className="text-xl font-bold text-slate-900">{report.customerName}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center bg-white p-5 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                      <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4">
+                        <MapPin className="w-6 h-6 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Location</p>
+                        <p className="text-xl font-bold text-slate-900">{report.location}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center bg-white p-5 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                      <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mr-4">
+                        <Calendar className="w-6 h-6 text-purple-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Inspection Date</p>
+                        <p className="text-xl font-bold text-slate-900">{new Date(report.inspectionDate).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Rating Section */}
+                <div className="lg:col-span-3 text-center">
+                  <div className="relative">
+                    {/* Animated Rating Circle */}
+                    <div className="relative inline-block">
+                      <svg className="w-56 h-56 transform -rotate-90" viewBox="0 0 200 200">
+                        {/* Background Circle */}
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="85"
+                          stroke="#f1f5f9"
+                          strokeWidth="12"
+                          fill="none"
+                        />
+                        {/* Progress Circle */}
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="85"
+                          stroke="#dc2626"
+                          strokeWidth="12"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeDasharray={`${(report.overallRating / 10) * 534.07} 534.07`}
+                          className="transition-all duration-1000 ease-out"
+                        />
+                      </svg>
+                      
+                      {/* Rating Content */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="text-6xl font-black text-red-600 mb-2">{report.overallRating}</div>
+                          <div className="text-xl font-bold text-slate-400">/10</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Rating Label */}
+                    <div className="mt-6">
+                      <div className="inline-flex items-center bg-red-600 text-white px-6 py-3 rounded-full shadow-lg">
+                        <Star className="w-5 h-5 mr-2 fill-current" />
+                        <span className="font-bold text-lg">Overall Rating</span>
+                      </div>
+                      <p className="text-sm text-slate-500 mt-3">
+                        Inspected by <span className="font-semibold text-slate-700">{report.inspector}</span>
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Technical Details */}
-            <div className="p-12">
-              <h3 className="text-3xl font-bold text-gray-900 mb-8 border-b-4 border-red-600 pb-4">
-                Vehicle Information
+          {/* Technical Specifications */}
+          <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden mb-8">
+            <div className="bg-slate-900 text-white p-8">
+              <h3 className="text-3xl font-bold flex items-center">
+                <FileText className="w-8 h-8 mr-4 text-red-400" />
+                Vehicle Specifications
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-red-500">
-                  <p className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-2">Chassis Number</p>
-                  <p className="text-xl font-mono text-gray-900">{report.chassisNo}</p>
-                </div>
-                <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-red-500">
-                  <p className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-2">Engine Number</p>
-                  <p className="text-xl font-mono text-gray-900">{report.engineNo}</p>
-                </div>
-                <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-red-500">
-                  <p className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-2">Variant</p>
-                  <p className="text-xl font-medium text-gray-900">{report.variant || 'Standard'}</p>
-                </div>
-                {report.engineCapacity && (
-                  <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-red-500">
-                    <p className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-2">Engine Capacity</p>
-                    <p className="text-xl font-medium text-gray-900">{report.engineCapacity}</p>
+            </div>
+            
+            <div className="p-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                  { label: 'Chassis Number', value: report.chassisNo, icon: '🔧' },
+                  { label: 'Engine Number', value: report.engineNo, icon: '⚙️' },
+                  { label: 'Variant', value: report.variant || 'Standard', icon: '🚗' },
+                  { label: 'Engine Capacity', value: report.engineCapacity || 'N/A', icon: '🔋' },
+                  { label: 'Mileage', value: report.mileage ? `${report.mileage} km` : 'N/A', icon: '📊' },
+                  { label: 'Fuel Type', value: report.fuelType || 'N/A', icon: '⛽' },
+                ].map((spec, index) => (
+                  <div key={index} className="group">
+                    <div className="bg-gradient-to-br from-slate-50 to-white p-8 rounded-2xl border-2 border-slate-100 hover:border-red-200 transition-all duration-300 hover:shadow-lg">
+                      <div className="flex items-center mb-4">
+                        <span className="text-3xl mr-3">{spec.icon}</span>
+                        <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">{spec.label}</p>
+                      </div>
+                      <p className="text-2xl font-bold text-slate-900 group-hover:text-red-600 transition-colors">
+                        {spec.value}
+                      </p>
+                    </div>
                   </div>
-                )}
-                {report.mileage && (
-                  <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-red-500">
-                    <p className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-2">Mileage</p>
-                    <p className="text-xl font-medium text-gray-900">{report.mileage} km</p>
-                  </div>
-                )}
-                {report.fuelType && (
-                  <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-red-500">
-                    <p className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-2">Fuel Type</p>
-                    <p className="text-xl font-medium text-gray-900">{report.fuelType}</p>
-                  </div>
-                )}
+                ))}
               </div>
             </div>
+          </div>
 
-            {/* Inspection Results */}
-            {report.inspectionResults && Object.keys(report.inspectionResults).length > 0 && (
-              <div className="p-12 bg-gray-50">
-                <h3 className="text-3xl font-bold text-gray-900 mb-8 border-b-4 border-red-600 pb-4">
+          {/* Inspection Results */}
+          {report.inspectionResults && Object.keys(report.inspectionResults).length > 0 && (
+            <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden mb-8">
+              <div className="bg-slate-900 text-white p-8">
+                <h3 className="text-3xl font-bold flex items-center">
+                  <Shield className="w-8 h-8 mr-4 text-red-400" />
                   Detailed Inspection Results
                 </h3>
-                <div className="space-y-8">
+              </div>
+              
+              <div className="p-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {Object.entries(report.inspectionResults).map(([category, items]) => (
-                    <div key={category} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-lg">
-                      <div className="bg-gray-900 text-white px-8 py-6">
-                        <h4 className="font-bold text-2xl uppercase tracking-wide">{category}</h4>
+                    <div key={category} className="bg-gradient-to-br from-slate-50 to-white rounded-2xl border-2 border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+                      <div className="bg-slate-800 text-white px-8 py-6">
+                        <h4 className="font-bold text-xl uppercase tracking-wide capitalize">{category}</h4>
                       </div>
-                      <div className="divide-y divide-gray-200">
+                      <div className="divide-y divide-slate-100">
                         {Object.entries(items).map(([item, value]) => (
-                          <div key={item} className="px-8 py-6 flex justify-between items-center hover:bg-gray-50 transition-colors">
-                            <span className="font-semibold text-lg text-gray-900">{item}</span>
-                            <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${
+                          <div key={item} className="px-8 py-6 flex justify-between items-center hover:bg-slate-50 transition-colors">
+                            <span className="font-semibold text-lg text-slate-800">{item}</span>
+                            <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold border-2 ${
                               ['Good', 'Ok', 'Working', 'Excellent', 'Clean', 'Normal', 'Smooth'].includes(value) 
-                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' 
+                                ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
                                 : ['Fair', 'Worn', 'Low', 'Weak', 'Minor'].includes(value) 
-                                ? 'bg-amber-100 text-amber-800 border border-amber-300' 
-                                : 'bg-red-100 text-red-800 border border-red-300'
+                                ? 'bg-amber-50 text-amber-800 border-amber-200' 
+                                : 'bg-red-50 text-red-800 border-red-200'
                             }`}>
                               {value}
                             </span>
@@ -271,31 +395,66 @@ const PublicReport = () => {
                   ))}
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Comments */}
-            {report.comments && (
-              <div className="p-12">
-                <h3 className="text-3xl font-bold text-gray-900 mb-8 border-b-4 border-red-600 pb-4">
+          {/* Comments Section */}
+          {report.comments && (
+            <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden mb-8">
+              <div className="bg-slate-900 text-white p-8">
+                <h3 className="text-3xl font-bold flex items-center">
+                  <FileText className="w-8 h-8 mr-4 text-red-400" />
                   Additional Comments
                 </h3>
-                <div className="bg-gray-50 p-8 rounded-xl border border-gray-200">
-                  <p className="text-lg text-gray-700 leading-relaxed">{report.comments}</p>
+              </div>
+              <div className="p-12">
+                <div className="bg-gradient-to-br from-slate-50 to-white p-8 rounded-2xl border-2 border-slate-100">
+                  <p className="text-lg text-slate-700 leading-relaxed">{report.comments}</p>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Footer */}
-            <div className="bg-gray-900 text-white p-12 text-center">
-              <div className="text-lg">
-                <p className="font-bold mb-4 text-2xl">Car2Chain Professional Inspection Services</p>
-                <p className="text-gray-300 mb-2">Report Generated: {new Date().toLocaleDateString()}</p>
-                <p className="text-gray-400 text-sm">Inspector: {report.inspector} • Report ID: {report._id}</p>
-                <div className="mt-6 pt-6 border-t border-gray-700">
-                  <p className="text-gray-400 text-xs">
-                    This is an official inspection report. For verification, contact Car2Chain support.
-                  </p>
+          {/* Professional Footer */}
+          <div className="bg-slate-900 rounded-3xl shadow-2xl border border-slate-700 overflow-hidden">
+            <div className="p-12 text-center text-white">
+              <div className="mb-8">
+                <img 
+                  src={logo} 
+                  alt="Car2Chain Logo" 
+                  className="h-16 w-auto mx-auto mb-6 filter brightness-0 invert"
+                />
+                <h4 className="text-3xl font-bold mb-4">Car2Chain Professional Inspection Services</h4>
+                <p className="text-xl text-slate-300 mb-8">Trusted • Certified • Professional</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div className="text-center">
+                  <Calendar className="w-8 h-8 mx-auto mb-3 text-red-400" />
+                  <p className="text-lg font-semibold">Report Generated</p>
+                  <p className="text-slate-300">{new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}</p>
                 </div>
+                <div className="text-center">
+                  <User className="w-8 h-8 mx-auto mb-3 text-red-400" />
+                  <p className="text-lg font-semibold">Certified Inspector</p>
+                  <p className="text-slate-300">{report.inspector}</p>
+                </div>
+                <div className="text-center">
+                  <Shield className="w-8 h-8 mx-auto mb-3 text-red-400" />
+                  <p className="text-lg font-semibold">Report ID</p>
+                  <p className="text-slate-300 font-mono text-sm">{report._id}</p>
+                </div>
+              </div>
+              
+              <div className="border-t border-slate-700 pt-8">
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  This is an official vehicle inspection report certified by Car2Chain Professional Services. 
+                  For verification or inquiries, please contact our support team with the report ID mentioned above.
+                </p>
               </div>
             </div>
           </div>
