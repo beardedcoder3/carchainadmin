@@ -1,4 +1,4 @@
-// backend/reports/reports.js - UPDATED VERSION with proper image handling
+// backend/reports/reports.js - FIXED VERSION (removed duplicate route)
 const express = require('express');
 const router = express.Router();
 const Report = require('../models/Report');
@@ -7,23 +7,26 @@ const Report = require('../models/Report');
 router.get('/public/:id', async (req, res) => {
   try {
     const reportId = req.params.id;
+    console.log('🔍 Fetching public report:', reportId);
     
     // Find report without auth requirement
     const report = await Report.findById(reportId);
     
     if (!report) {
+      console.log('❌ Public report not found:', reportId);
       return res.status(404).json({ message: 'Report not found' });
     }
     
+    console.log('✅ Public report found:', report.registrationNo);
     res.json(report);
   } catch (error) {
-    console.error('Error fetching public report:', error);
+    console.error('❌ Error fetching public report:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
 // GET all reports
- router.get('/', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     console.log('🔍 Fetching all reports...');
     
@@ -55,6 +58,7 @@ router.get('/public/:id', async (req, res) => {
     });
   }
 });
+
 // POST create new report
 router.post('/', async (req, res) => {
   try {
