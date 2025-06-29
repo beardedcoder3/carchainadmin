@@ -318,8 +318,9 @@ const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${rep
     }
   };
 
-// Replace your handleDownloadReport function:
+// Replace your current handleDownloadReport function with this:
 const handleDownloadReport = (report) => {
+  // Create a direct URL to the public report page
   const publicUrl = `${window.location.origin}/public-report/${report._id}`;
   window.open(publicUrl, '_blank');
   console.log('📄 Opened public report:', publicUrl);
