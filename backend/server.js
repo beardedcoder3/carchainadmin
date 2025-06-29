@@ -120,15 +120,7 @@ app.get('/api/test', (req, res) => {
   });
 });
 
-// Serve static files from React build
-app.use(express.static(path.join(__dirname, '../carchain/build')));
 
-// Catch all handler: send back React's index.html file
-app.get('*', (req, res) => {
-  if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, '../carchain/build', 'index.html'));
-  }
-});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
