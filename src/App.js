@@ -9,6 +9,7 @@ import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Reports from './components/Reports';
 import Settings from './components/Settings';
+import PublicReport from './components/PublicReport';
 import './App.css';
 
 
@@ -33,6 +34,7 @@ function App() {
                       <Routes>
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/public-report/:reportId" element={<PublicReport />} />
                         <Route path="/reports" element={<Reports />} />
                         <Route path="/settings" element={<Settings />} />
                         <Route path="*" element={

@@ -3,47 +3,22 @@ const express = require('express');
 const router = express.Router();
 const Report = require('../models/Report');
 
-router.post('/share', async (req, res) => {
+// GET /api/reports/public/:id - Public report access (no auth required)
+router.get('/public/:id', async (req, res) => {
   try {
-    const { reportId, reportData, shareToken, expiresAt } = req.body;
+    const reportId = req.params.id;
     
-    // Store the shareable report data (you can use MongoDB or a simple file)
-    const shareableReport = {
-      shareToken,
-      reportId,
-      reportData,
-      createdAt: new Date(),
-      expiresAt: new Date(expiresAt)
-    };
+    // Find report without auth requirement
+    const report = await Report.findById(reportId);
     
-    // Save to database or file system
-    // For now, you could store in memory or a JSON file
+    if (!report) {
+      return res.status(404).json({ message: 'Report not found' });
+    }
     
-    res.json({
-      success: true,
-      shareToken,
-      message: 'Shareable link created successfully'
-    });
-    
+    res.json(report);
   } catch (error) {
-    console.error('Error creating shareable link:', error);
+    console.error('Error fetching public report:', error);
     res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-// GET /public-report/:shareToken - Public report view
-router.get('/public-report/:shareToken', async (req, res) => {
-  try {
-    const { shareToken } = req.params;
-    
-    // Find the shared report by token
-    // const sharedReport = await findSharedReport(shareToken);
-    
-    // Generate and return the HTML report
-    // Similar to your current generatePDFReport function
-    
-  } catch (error) {
-    res.status(404).send('Report not found or expired');
   }
 });
 
