@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from "../carchainlogopng.png"
@@ -38,27 +37,27 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const handleNavClick = () => {
     // Close sidebar on mobile when nav item is clicked
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 768 && onClose) {
       onClose();
     }
   };
 
   return (
     <div className={`sidebar-container ${isOpen ? 'mobile-open' : ''}`}>
-      <div className="bg-gray-900 text-white w-64 min-h-screen flex flex-col">
-        {/* Close button for mobile */}
-        <div className="mobile-close-button">
-          <button 
-            onClick={onClose}
-            className="p-2 text-white hover:bg-gray-800 rounded"
-            aria-label="Close menu"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+      {/* Mobile close button */}
+      <div className="mobile-close-button">
+        <button 
+          onClick={onClose}
+          aria-label="Close navigation menu"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
 
+      {/* Sidebar content */}
+      <div className="bg-gray-900 text-white w-64 min-h-screen flex flex-col">
         {/* Logo */}
         <div className="flex items-center p-6 border-b border-gray-800">
           <div className="p-2">
