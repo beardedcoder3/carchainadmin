@@ -429,9 +429,10 @@ div[class*="max-w-sm"] p[class*="text-sm"] {
   display: block !important;
 }
 
-/* Mobile Menu Button - Professional styling */
+
+/* Mobile Menu Button - HIDDEN BY DEFAULT */
 .mobile-menu-toggle {
-  display: none;
+  display: none !important; /* Force hidden by default */
   position: fixed;
   top: 1rem;
   left: 1rem;
@@ -446,26 +447,29 @@ div[class*="max-w-sm"] p[class*="text-sm"] {
   transition: all 0.2s ease;
   width: 48px;
   height: 48px;
-  display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* ONLY show on mobile screens */
 @media (max-width: 768px) {
   .mobile-menu-toggle {
     display: flex !important;
   }
 }
 
-.mobile-menu-toggle:hover {
-  background: #b91c1c;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+/* FORCE hide on desktop */
+@media (min-width: 769px) {
+  .mobile-menu-toggle {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
 }
 
-/* Mobile Sidebar Overlay */
+/* Mobile Sidebar Overlay - HIDDEN BY DEFAULT */
 .mobile-sidebar-overlay {
-  display: none;
+  display: none !important;
   position: fixed;
   top: 0;
   left: 0;
@@ -476,231 +480,34 @@ div[class*="max-w-sm"] p[class*="text-sm"] {
   backdrop-filter: blur(2px);
 }
 
+/* ONLY show overlay on mobile */
 @media (max-width: 768px) {
   .mobile-sidebar-overlay {
     display: block !important;
   }
 }
 
-/* Professional Mobile Responsive Layout */
-@media (max-width: 768px) {
-  /* Hide sidebar by default on mobile */
-  .bg-gray-900.text-white.w-64.min-h-screen.flex.flex-col {
+/* FORCE hide overlay on desktop */
+@media (min-width: 769px) {
+  .mobile-sidebar-overlay {
     display: none !important;
+    visibility: hidden !important;
   }
-  
-  /* Sidebar container for mobile */
+}
+
+/* Desktop - ensure normal sidebar behavior */
+@media (min-width: 769px) {
   .sidebar-container {
-    position: fixed !important;
-    top: 0 !important;
-    left: -280px !important;
-    height: 100vh !important;
-    width: 280px !important;
-    z-index: 1000 !important;
-    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: static !important;
+    left: auto !important;
+    transform: none !important;
   }
   
-  .sidebar-container.mobile-open {
-    left: 0 !important;
-  }
-  
-  .sidebar-container.mobile-open .bg-gray-900.text-white.w-64.min-h-screen.flex.flex-col {
+  .bg-gray-900.text-white.w-64.min-h-screen.flex.flex-col {
     display: flex !important;
   }
   
-  /* Main content adjustments */
-  .flex.h-screen.bg-gray-100 {
-    flex-direction: column !important;
-  }
-  
-  .flex-1.flex.flex-col.overflow-hidden {
-    width: 100% !important;
-    margin-left: 0 !important;
-    flex: 1 !important;
-  }
-  
-  /* Header adjustments - add top padding for menu button */
-  .flex-1.flex.flex-col.overflow-hidden > div:first-child {
-    padding-top: 4rem !important;
-  }
-  
-  /* Main content padding */
-  main.flex-1.overflow-x-hidden.overflow-y-auto.bg-gray-100.p-6 {
-    padding: 1rem !important;
-  }
-  
-  /* Card improvements */
-  .bg-white.p-6.rounded-lg.shadow {
-    padding: 1.5rem !important;
-    margin-bottom: 1rem !important;
-    border-radius: 0.75rem !important;
-  }
-  
-  /* Form and input improvements */
-  .bg-white {
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
-  }
-  
-  /* Grid layouts - professional stacking */
-  .grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 1rem !important;
-  }
-  
-  /* Button improvements */
-  button {
-    min-height: 44px !important;
-    padding: 0.75rem 1.5rem !important;
-    border-radius: 0.5rem !important;
-    font-weight: 500 !important;
-  }
-  
-  /* Input improvements */
-  input, select, textarea {
-    padding: 0.875rem !important;
-    font-size: 16px !important;
-    border-radius: 0.5rem !important;
-    border: 1px solid #d1d5db !important;
-  }
-  
-  /* Typography improvements */
-  h1 {
-    font-size: 1.75rem !important;
-    line-height: 1.4 !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  h2 {
-    font-size: 1.375rem !important;
-    line-height: 1.4 !important;
-    margin-bottom: 0.75rem !important;
-  }
-  
-  h3 {
-    font-size: 1.125rem !important;
-    line-height: 1.5 !important;
-    margin-bottom: 0.5rem !important;
-  }
-  
-  /* Professional spacing */
-  .space-y-4 > * + * {
-    margin-top: 1rem !important;
-  }
-  
-  .space-y-6 > * + * {
-    margin-top: 1.5rem !important;
-  }
-  
-  /* File upload area improvements */
-  div[class*="border-dashed"] {
-    padding: 2rem 1rem !important;
-    text-align: center !important;
-    border-radius: 0.75rem !important;
-  }
-  
-  /* Better image/file upload styling */
-  div[class*="border-dashed"] p {
-    font-size: 0.875rem !important;
-    line-height: 1.5 !important;
-    margin: 0.5rem 0 !important;
-  }
-}
-
-/* Close button in sidebar */
-.mobile-close-button {
-  display: none;
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1001;
-}
-
-@media (max-width: 768px) {
   .mobile-close-button {
-    display: block !important;
+    display: none !important;
   }
-}
-
-.mobile-close-button button {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  padding: 0.5rem;
-  border-radius: 0.375rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mobile-close-button button:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Professional navigation styling for mobile */
-@media (max-width: 768px) {
-  .sidebar-container nav a {
-    padding: 1rem !important;
-    margin-bottom: 0.25rem !important;
-    font-size: 1rem !important;
-    font-weight: 500 !important;
-    border-radius: 0.5rem !important;
-  }
-  
-  .sidebar-container .flex.items-center.p-6 {
-    padding: 1.5rem 1rem !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  }
-}
-
-/* Prevent body scroll when sidebar is open */
-@media (max-width: 768px) {
-  body.sidebar-open {
-    overflow: hidden !important;
-  }
-}
-
-/* Very small screens */
-@media (max-width: 480px) {
-  .mobile-menu-toggle {
-    top: 0.75rem !important;
-    left: 0.75rem !important;
-  }
-  
-  main.flex-1.overflow-x-hidden.overflow-y-auto.bg-gray-100.p-6 {
-    padding: 0.75rem !important;
-  }
-  
-  .bg-white.p-6.rounded-lg.shadow {
-    padding: 1rem !important;
-  }
-  
-  h1 {
-    font-size: 1.5rem !important;
-  }
-  
-  h2 {
-    font-size: 1.25rem !important;
-  }
-}
-
-/* Dark mode adjustments */
-.dark .mobile-menu-toggle {
-  background: #dc2626 !important;
-}
-
-.dark .mobile-sidebar-overlay {
-  background: rgba(0, 0, 0, 0.7) !important;
-}
-
-.dark .mobile-close-button button {
-  background: rgba(255, 255, 255, 0.1) !important;
-}
-
-.dark .mobile-close-button button:hover {
-  background: rgba(255, 255, 255, 0.2) !important;
 }
