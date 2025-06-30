@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
 import { Eye, EyeOff, Shield, AlertCircle, Car } from 'lucide-react';
+import logo from "./logo.png"
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -47,15 +48,19 @@ const Login = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-red-900 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <div className="p-3 bg-red-600 rounded-full">
-              <Car className="w-8 h-8 text-white" />
-            </div>
-          </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Car2Chain</h1>
-          <p className="text-slate-300">Inspection Portal Admin</p>
-        </div>
+       <div className="text-center mb-8">
+  <div className="flex items-center justify-center mb-4">
+    <div className="p-3 bg-red-600 rounded-full">
+      <img 
+        src={logo} 
+        alt="CarChain Logo" 
+        className="w-8 h-8 object-contain"
+      />
+    </div>
+  </div>
+  <h1 className="text-3xl font-bold text-white mb-2">CarChain</h1>
+  <p className="text-slate-300">Inspection Portal Admin</p>
+</div>
 
         {/* Login Card */}
         <div className="bg-white rounded-xl shadow-2xl p-8">
