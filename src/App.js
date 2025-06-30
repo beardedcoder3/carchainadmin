@@ -15,14 +15,18 @@ import './App.css';
 function App() {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  // Initialize global alert overrides
   useEffect(() => {
     overrideAlerts();
   }, []);
 
-  // Close sidebar when clicking outside on mobile
   const closeMobileSidebar = () => {
     setIsMobileSidebarOpen(false);
+    document.body.classList.remove('sidebar-open');
+  };
+
+  const openMobileSidebar = () => {
+    setIsMobileSidebarOpen(true);
+    document.body.classList.add('sidebar-open');
   };
 
   return (
@@ -32,18 +36,16 @@ function App() {
           <AuthProvider>
             <Router>
               <Routes>
-                {/* 🌍 PUBLIC ROUTES - No authentication required */}
                 <Route path="/public-report/:reportId" element={<PublicReport />} />
                 
-                {/* 🔐 PROTECTED ROUTES - Authentication required */}
                 <Route path="/*" element={
                   <ProtectedRoute>
                     <div className="flex h-screen bg-gray-100">
                       {/* Mobile Menu Button */}
                       <button 
                         className="mobile-menu-toggle"
-                        onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-                        aria-label="Toggle mobile menu"
+                        onClick={openMobileSidebar}
+                        aria-label="Open navigation menu"
                       >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -74,8 +76,8 @@ function App() {
                             <Route path="/settings" element={<Settings />} />
                             <Route path="*" element={
                               <div className="bg-white p-6 rounded-lg shadow">
-                                <h1 className="text-2xl font-bold">Page Not Found</h1>
-                                <p className="mt-4">The page you're looking for doesn't exist.</p>
+                                <h1 className="text-2xl font-bold text-gray-900">Page Not Found</h1>
+                                <p className="mt-4 text-gray-600">The page you're looking for doesn't exist.</p>
                               </div>
                             } />
                           </Routes>
