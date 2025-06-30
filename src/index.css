@@ -430,54 +430,109 @@ div[class*="max-w-sm"] p[class*="text-sm"] {
 }
 
 /* ==========================================
-   CLEAN MOBILE FIX - NO TAILWIND CONFLICTS
+   AGGRESSIVE MOBILE FIX - NUCLEAR OPTION
    ========================================== */
 
-/* Mobile responsive layout - using custom selectors only */
+/* Use !important on everything and target multiple ways */
 @media screen and (max-width: 768px) {
-  /* Hide sidebar on mobile by targeting the specific div structure */
-  div.bg-gray-900.text-white[class*="w-64"] {
+  
+  /* FORCE HIDE SIDEBAR - Multiple targeting methods */
+  .w-64,
+  [class*="w-64"],
+  div[class*="bg-gray-900"],
+  .bg-gray-900.text-white,
+  .bg-gray-900.text-white.w-64,
+  .bg-gray-900.text-white.w-64.min-h-screen,
+  .bg-gray-900.text-white.w-64.min-h-screen.flex.flex-col {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    left: -9999px !important;
   }
   
-  /* Make main content full width when sidebar is hidden */
-  div[class*="flex-1"][class*="flex"][class*="flex-col"] {
+  /* FORCE MAIN CONTENT FULL WIDTH - Multiple targeting */
+  .flex.h-screen.bg-gray-100,
+  .flex.h-screen,
+  [class*="flex"][class*="h-screen"] {
+    flex-direction: column !important;
+  }
+  
+  .flex-1.flex.flex-col.overflow-hidden,
+  [class*="flex-1"][class*="flex"][class*="flex-col"],
+  .flex-1.flex.flex-col {
     width: 100% !important;
     margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: 100% !important;
+    flex: 1 !important;
   }
   
-  /* Reduce padding on main content for mobile */
-  main[class*="p-6"] {
+  /* FORCE MAIN PADDING REDUCTION */
+  main,
+  main.flex-1,
+  main[class*="p-6"],
+  .flex-1.overflow-x-hidden.overflow-y-auto.bg-gray-100.p-6,
+  [class*="p-6"] {
     padding: 1rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
   }
   
-  /* Stack grid items vertically on mobile */
-  div[class*="grid"] {
+  /* FORCE GRID SINGLE COLUMN */
+  .grid,
+  [class*="grid"],
+  .grid-cols-1,
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4,
+  [class*="grid-cols"] {
     display: grid !important;
     grid-template-columns: 1fr !important;
+    grid-template-rows: auto !important;
     gap: 1rem !important;
   }
   
-  /* Make cards more mobile-friendly */
-  div[class*="bg-white"][class*="p-6"] {
+  /* FORCE CARD MOBILE STYLING */
+  .bg-white,
+  [class*="bg-white"],
+  .bg-white.p-6,
+  .bg-white.p-6.rounded-lg,
+  .bg-white.p-6.rounded-lg.shadow,
+  [class*="bg-white"][class*="p-6"] {
     padding: 1rem !important;
     margin-bottom: 1rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
   
-  /* Better button sizing for mobile */
+  /* FORCE BUTTON MOBILE STYLING */
   button {
+    width: 100% !important;
     min-height: 44px !important;
-    padding: 0.75rem 1rem !important;
+    padding: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 1rem !important;
+    box-sizing: border-box !important;
   }
   
-  /* Better form inputs for mobile */
-  input, select, textarea {
+  /* FORCE INPUT MOBILE STYLING */
+  input,
+  select,
+  textarea {
     width: 100% !important;
     padding: 0.75rem !important;
-    font-size: 16px !important; /* Prevents zoom on iOS */
+    font-size: 16px !important;
+    box-sizing: border-box !important;
+    -webkit-appearance: none !important;
   }
   
-  /* Better text sizing for mobile */
+  /* FORCE TEXT SIZING */
   h1 {
     font-size: 1.5rem !important;
     line-height: 1.4 !important;
@@ -493,25 +548,38 @@ div[class*="max-w-sm"] p[class*="text-sm"] {
     line-height: 1.4 !important;
   }
   
-  /* Prevent horizontal scrolling */
+  /* FORCE NO HORIZONTAL SCROLL */
+  html,
   body {
     overflow-x: hidden !important;
+    max-width: 100vw !important;
   }
   
-  /* Better spacing for mobile */
-  div[class*="space-y"] > * + * {
-    margin-top: 1rem !important;
+  /* FORCE CONTAINER WIDTHS */
+  * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* FORCE VIEWPORT META */
+  html {
+    -webkit-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
   }
 }
 
-/* Very small screens (phones in portrait) */
+/* VERY SMALL SCREENS - EVEN MORE AGGRESSIVE */
 @media screen and (max-width: 480px) {
-  main[class*="p-6"] {
+  main,
+  main[class*="p-6"],
+  [class*="p-6"] {
     padding: 0.5rem !important;
   }
   
-  div[class*="bg-white"][class*="p-6"] {
+  .bg-white,
+  [class*="bg-white"] {
     padding: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
   }
   
   h1 {
@@ -520,13 +588,5 @@ div[class*="max-w-sm"] p[class*="text-sm"] {
   
   h2 {
     font-size: 1.125rem !important;
-  }
-}
-
-/* Tablet adjustments */
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-  /* Slightly smaller sidebar on tablets */
-  div.bg-gray-900.text-white[class*="w-64"] {
-    width: 200px !important;
   }
 }
