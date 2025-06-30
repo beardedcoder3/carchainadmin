@@ -430,172 +430,90 @@ div[class*="max-w-sm"] p[class*="text-sm"] {
 }
 
 /* ==========================================
-   MOBILE RESPONSIVE LAYOUT FIXES - CORRECT VERSION
+   CLEAN MOBILE FIX - NO TAILWIND CONFLICTS
    ========================================== */
 
-/* Mobile-first approach - Hide sidebar on mobile */
-@media (max-width: 768px) {
-  /* Target your main flex container */
-  .flex.h-screen.bg-gray-100 {
-    flex-direction: column !important;
-  }
-  
-  /* Hide sidebar completely on mobile */
-  .bg-gray-900.text-white.w-64.min-h-screen.flex.flex-col {
+/* Mobile responsive layout - using custom selectors only */
+@media screen and (max-width: 768px) {
+  /* Hide sidebar on mobile by targeting the specific div structure */
+  div.bg-gray-900.text-white[class*="w-64"] {
     display: none !important;
   }
   
-  /* Make main content area full width */
-  .flex-1.flex.flex-col.overflow-hidden {
+  /* Make main content full width when sidebar is hidden */
+  div[class*="flex-1"][class*="flex"][class*="flex-col"] {
     width: 100% !important;
     margin-left: 0 !important;
   }
   
-  /* Adjust main content padding */
-  main.flex-1.overflow-x-hidden.overflow-y-auto.bg-gray-100.p-6 {
+  /* Reduce padding on main content for mobile */
+  main[class*="p-6"] {
     padding: 1rem !important;
   }
   
-  /* Stack dashboard stats vertically */
-  .grid {
-    grid-template-columns: 1fr !important;
-    gap: 1rem !important;
-  }
-  
-  /* Make cards more mobile-friendly */
-  .bg-white.p-6.rounded-lg.shadow {
-    padding: 1rem !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  /* Adjust text sizes for mobile */
-  h1 {
-    font-size: 1.5rem !important;
-  }
-  
-  h2 {
-    font-size: 1.25rem !important;
-  }
-  
-  /* Make buttons full width on mobile */
-  button {
-    width: 100% !important;
-    margin-bottom: 0.5rem !important;
-  }
-  
-  /* Fix table overflow */
-  .overflow-x-auto {
-    overflow-x: auto !important;
-  }
-  
-  /* Ensure proper spacing */
-  .space-y-4 > * + * {
-    margin-top: 1rem !important;
-  }
-  
-  /* Make forms more mobile-friendly */
-  input, select, textarea {
-    width: 100% !important;
-    padding: 0.75rem !important;
-    font-size: 1rem !important;
-  }
-}
-
-/* Tablet adjustments */
-@media (min-width: 768px) and (max-width: 1024px) {
-  /* Reduce sidebar width on tablet */
-  .bg-gray-900.text-white.w-64.min-h-screen.flex.flex-col {
-    width: 200px !important;
-  }
-  
-  /* Adjust main content margin for tablet */
-  .flex-1.flex.flex-col.overflow-hidden {
-    margin-left: 200px !important;
-  }
-  
-  /* Grid adjustments for tablet */
-  .grid-cols-4 {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-}
-
-/* Ensure mobile viewport is handled correctly */
-@media (max-width: 768px) {
-  html {
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-  }
-  
-  body {
-    overflow-x: hidden;
-  }
-  
-  /* Prevent zoom on input focus */
-  input, select, textarea {
-    font-size: 16px !important;
-  }
-  
-  /* Touch targets */
-  button, .clickable, a {
-    min-height: 44px !important;
-    min-width: 44px !important;
-  }
-  
-  /* Navigation items in sidebar (when visible) */
-  .flex.items-center.px-4.py-3.rounded-lg {
-    padding: 1rem !important;
-    min-height: 48px !important;
-  }
-}
-
-/* Dark mode adjustments for mobile */
-@media (max-width: 768px) {
-  .dark .bg-gray-100 {
-    background-color: #0f172a !important;
-  }
-  
-  .dark .bg-white {
-    background-color: #1e293b !important;
-  }
-}
-
-/* Specific component adjustments */
-@media (max-width: 768px) {
-  /* Dashboard specific */
-  .dashboard-grid {
+  /* Stack grid items vertically on mobile */
+  div[class*="grid"] {
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 1rem !important;
   }
   
-  /* Reports table adjustments */
-  .reports-table {
-    font-size: 0.875rem !important;
+  /* Make cards more mobile-friendly */
+  div[class*="bg-white"][class*="p-6"] {
+    padding: 1rem !important;
+    margin-bottom: 1rem !important;
   }
   
-  .reports-table th,
-  .reports-table td {
-    padding: 0.5rem !important;
+  /* Better button sizing for mobile */
+  button {
+    min-height: 44px !important;
+    padding: 0.75rem 1rem !important;
   }
   
-  /* Settings form adjustments */
-  .settings-form .grid {
-    grid-template-columns: 1fr !important;
+  /* Better form inputs for mobile */
+  input, select, textarea {
+    width: 100% !important;
+    padding: 0.75rem !important;
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+  
+  /* Better text sizing for mobile */
+  h1 {
+    font-size: 1.5rem !important;
+    line-height: 1.4 !important;
+  }
+  
+  h2 {
+    font-size: 1.25rem !important;
+    line-height: 1.4 !important;
+  }
+  
+  h3 {
+    font-size: 1.125rem !important;
+    line-height: 1.4 !important;
+  }
+  
+  /* Prevent horizontal scrolling */
+  body {
+    overflow-x: hidden !important;
+  }
+  
+  /* Better spacing for mobile */
+  div[class*="space-y"] > * + * {
+    margin-top: 1rem !important;
   }
 }
 
-/* Force layout on very small screens */
-@media (max-width: 480px) {
-  main.flex-1.overflow-x-hidden.overflow-y-auto.bg-gray-100.p-6 {
+/* Very small screens (phones in portrait) */
+@media screen and (max-width: 480px) {
+  main[class*="p-6"] {
     padding: 0.5rem !important;
   }
   
-  .bg-white.p-6.rounded-lg.shadow {
+  div[class*="bg-white"][class*="p-6"] {
     padding: 0.75rem !important;
-    border-radius: 0.5rem !important;
   }
   
-  /* Smaller text on very small screens */
   h1 {
     font-size: 1.25rem !important;
   }
@@ -605,18 +523,10 @@ div[class*="max-w-sm"] p[class*="text-sm"] {
   }
 }
 
-/* Enhanced notification positioning for mobile */
-@media (max-width: 640px) {
-  .notification-container {
-    top: 0.5rem !important;
-    right: 0.5rem !important;
-    left: 0.5rem !important;
-    width: auto !important;
-  }
-  
-  .notification-container > div {
-    min-width: calc(100vw - 2rem) !important;
-    max-width: calc(100vw - 2rem) !important;
-    width: auto !important;
+/* Tablet adjustments */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  /* Slightly smaller sidebar on tablets */
+  div.bg-gray-900.text-white[class*="w-64"] {
+    width: 200px !important;
   }
 }
