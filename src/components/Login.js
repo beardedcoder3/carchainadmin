@@ -136,7 +136,7 @@ const Login = () => {
 
           <div className="mt-6 pt-6 border-t border-slate-200">
             <div className="text-center text-sm text-slate-500">
-              <p>Having trouble? Contact system administrator</p>
+          
             </div>
           </div>
         </div>
