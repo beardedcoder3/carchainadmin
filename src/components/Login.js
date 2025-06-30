@@ -143,7 +143,7 @@ const Login = () => {
 
         {/* Footer */}
         <div className="text-center mt-8 text-slate-400 text-sm">
-          <p>&copy; 2024 Car2Chain. All rights reserved.</p>
+          <p>&copy; 2024 CarChain. All rights reserved.</p>
         </div>
       </div>
     </div>
