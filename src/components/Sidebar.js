@@ -1,8 +1,9 @@
+
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from "../carchainlogopng.png"
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const navItems = [
     {
       name: 'Dashboard',
@@ -23,7 +24,6 @@ const Sidebar = () => {
         </svg>
       )
     },
-   
     {
       name: 'Settings',
       path: '/settings',
@@ -36,46 +36,68 @@ const Sidebar = () => {
     }
   ];
 
-  return (
-    <div className="bg-gray-900 text-white w-64 min-h-screen flex flex-col">
-      {/* Logo */}
-  <div className="flex items-center p-6 border-b border-gray-800">
-  <div className="p-2">  {/* Remove bg-red-600 and rounded-lg */}
-    <img 
-      src={logo} 
-      alt="CarChain Logo" 
-      className="w-15 h-15 object-contain"
-    />
-  </div>
-  <div className="ml-3">
-    
-    <p className="text-xs text-gray-400">Inspection Portal</p>
-  </div>
-</div>
+  const handleNavClick = () => {
+    // Close sidebar on mobile when nav item is clicked
+    if (window.innerWidth <= 768) {
+      onClose();
+    }
+  };
 
-      {/* Navigation */}
-      <nav className="flex-1 p-4">
-        <div className="space-y-2">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.path}
-              className={({ isActive }) =>
-                `flex items-center px-4 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 ${
-                  isActive
-                    ? 'bg-red-600 text-white shadow-lg'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                }`
-              }
-            >
-              <div className="transition-transform duration-200">
-                {item.icon}
-              </div>
-              <span className="ml-3 font-medium">{item.name}</span>
-            </NavLink>
-          ))}
+  return (
+    <div className={`sidebar-container ${isOpen ? 'mobile-open' : ''}`}>
+      <div className="bg-gray-900 text-white w-64 min-h-screen flex flex-col">
+        {/* Close button for mobile */}
+        <div className="mobile-close-button">
+          <button 
+            onClick={onClose}
+            className="p-2 text-white hover:bg-gray-800 rounded"
+            aria-label="Close menu"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
-      </nav>
+
+        {/* Logo */}
+        <div className="flex items-center p-6 border-b border-gray-800">
+          <div className="p-2">
+            <img 
+              src={logo} 
+              alt="CarChain Logo" 
+              className="w-15 h-15 object-contain"
+            />
+          </div>
+          <div className="ml-3">
+            <p className="text-xs text-gray-400">Inspection Portal</p>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-4">
+          <div className="space-y-2">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.path}
+                onClick={handleNavClick}
+                className={({ isActive }) =>
+                  `flex items-center px-4 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 ${
+                    isActive
+                      ? 'bg-red-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  }`
+                }
+              >
+                <div className="transition-transform duration-200">
+                  {item.icon}
+                </div>
+                <span className="ml-3 font-medium">{item.name}</span>
+              </NavLink>
+            ))}
+          </div>
+        </nav>
+      </div>
     </div>
   );
 };

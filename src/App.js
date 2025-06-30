@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './components/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -13,10 +13,17 @@ import PublicReport from './components/PublicReport';
 import './App.css';
 
 function App() {
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
   // Initialize global alert overrides
   useEffect(() => {
     overrideAlerts();
   }, []);
+
+  // Close sidebar when clicking outside on mobile
+  const closeMobileSidebar = () => {
+    setIsMobileSidebarOpen(false);
+  };
 
   return (
     <NotificationProvider>
@@ -32,7 +39,31 @@ function App() {
                 <Route path="/*" element={
                   <ProtectedRoute>
                     <div className="flex h-screen bg-gray-100">
-                      <Sidebar />
+                      {/* Mobile Menu Button */}
+                      <button 
+                        className="mobile-menu-toggle"
+                        onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+                        aria-label="Toggle mobile menu"
+                      >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                      </button>
+
+                      {/* Mobile Overlay */}
+                      {isMobileSidebarOpen && (
+                        <div 
+                          className="mobile-sidebar-overlay"
+                          onClick={closeMobileSidebar}
+                        />
+                      )}
+
+                      {/* Sidebar */}
+                      <Sidebar 
+                        isOpen={isMobileSidebarOpen} 
+                        onClose={closeMobileSidebar}
+                      />
+                      
                       <div className="flex-1 flex flex-col overflow-hidden">
                         <Header />
                         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
